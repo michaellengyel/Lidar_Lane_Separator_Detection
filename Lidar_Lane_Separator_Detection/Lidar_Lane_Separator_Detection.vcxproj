@@ -143,13 +143,19 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\Detector.cpp" />
+    <ClCompile Include="src\Preprocessor.cpp" />
     <ClCompile Include="src\Scan.cpp" />
     <ClCompile Include="src\IOHandler.cpp" />
     <ClCompile Include="src\Main.cpp" />
+    <ClCompile Include="src\Visualization.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Detector.h" />
+    <ClInclude Include="src\Preprocessor.h" />
     <ClInclude Include="src\Scan.h" />
     <ClInclude Include="src\IOHandler.h" />
+    <ClInclude Include="src\Visualization.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
