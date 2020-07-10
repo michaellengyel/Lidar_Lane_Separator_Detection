@@ -1,9 +1,19 @@
-#pragma once
+//============================================================================================================
+// Copyright Disclaimer Placeholder
+//============================================================================================================
+
+#ifndef IO_HANDLER
+#define IO_HANDLER
 
 #include <iostream>
 #include <string>
 #include <fstream>
 #include <string>
+
+//============================================================================================================
+// Class Documentation Placeholder
+// TODO: Switch to Doxygen format(///)
+//============================================================================================================
 
 class IOHandler {
 public:
@@ -23,3 +33,5 @@ private:
 	std::string m_inputFile;
 
 };
+
+#endif
