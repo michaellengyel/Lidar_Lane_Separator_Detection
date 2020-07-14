@@ -20,14 +20,17 @@ class Preprocessor {
 public:
 	
 	Preprocessor(Scan& scan, IOHandler& ioHandler) {
-
+		loadScan(scan, ioHandler);
 	}
 
 	Preprocessor() {
 
 	}
 
+	void loadScan(Scan& scan, IOHandler& ioHandler);
+
 private:
+
 
 };
 

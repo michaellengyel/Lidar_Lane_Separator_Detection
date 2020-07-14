@@ -6,6 +6,7 @@
 #define SCAN
 
 #include <vector>
+#include <iostream>
 
 //============================================================================================================
 // This class is the data final, filtered data structure on which any and all algorithms will operate. This
@@ -25,14 +26,18 @@ public:
 
 	}
 
-private:
-
 	// Member class for holding the point data
 	class Point {
 	public:
 
-		Point(const int xPos, const int yPos, const int zPos, const int luminosity)
+		Point(const double xPos, const double yPos, const double zPos, const double luminosity)
 			: m_xPos(xPos), m_yPos(yPos), m_zPos(zPos), m_luminosity(luminosity)
+		{
+
+		}
+
+		Point(const double xPos, const double yPos, const double zPos)
+			: m_xPos(xPos), m_yPos(yPos), m_zPos(zPos)
 		{
 
 		}
@@ -41,10 +46,15 @@ private:
 
 		}
 
-		const int m_xPos = 0;
-		const int m_yPos = 0;
-		const int m_zPos = 0;
-		const int m_luminosity = 0;
+		const double m_xPos = 0;
+		const double m_yPos = 0;
+		const double m_zPos = 0;
+		const double m_luminosity = 0;
+
+		void printPoint() {
+			std::cout.precision(17);
+			std::cout << m_xPos << "\t" << m_yPos << "\t" << m_zPos << "\t" << std::endl;
+		}
 	};
 
 	// Member data structure holding Points

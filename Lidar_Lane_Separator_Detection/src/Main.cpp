@@ -9,7 +9,7 @@
 int main() {
 
 	// Declaring data container and handling classes
-	IOHandler ioHandler("res/2.csv");
+	IOHandler ioHandler("res/3.csv");
 	Scan scan;
 
 	// Declaring data processing classes
@@ -18,10 +18,6 @@ int main() {
 
 	// Declaring data and results visualization classes
 	Visualization visualization(scan);
-
-
-	std::string s = ioHandler.readData(9, 1);
-	std::cout << s << std::endl;
 
 	return 0;
 }

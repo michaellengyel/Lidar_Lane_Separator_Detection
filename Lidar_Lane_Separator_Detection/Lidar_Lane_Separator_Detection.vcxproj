@@ -152,6 +152,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Detector.h" />
+    <ClInclude Include="src\Enumerations.h" />
     <ClInclude Include="src\Preprocessor.h" />
     <ClInclude Include="src\Scan.h" />
     <ClInclude Include="src\IOHandler.h" />

@@ -50,5 +50,8 @@
     <ClInclude Include="src\Visualization.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\Enumerations.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
