@@ -20,7 +20,7 @@ void Preprocessor::loadScan(Scan& scan, IOHandler& ioHandler) {
 		for (int i = 0; i < line.size(); i++) {
 
 			length++;
-			if ((line.at(i) == ',') || (line.at(i) == '\n')) {
+			if ((line.at(i) == ',') || (line.at(i) == line.size() - 1)) {
 				blocks[j] = line.substr(start, length);
 				j++;
 				start += length;
