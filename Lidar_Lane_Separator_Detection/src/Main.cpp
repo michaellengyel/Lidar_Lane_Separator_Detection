@@ -9,7 +9,7 @@
 int main() {
 
 	// Declaring data container and handling classes
-	IOHandler ioHandler("res/3.csv");
+	IOHandler ioHandler("res/1.csv");
 	Scan scan;
 
 	// Declaring data processing classes

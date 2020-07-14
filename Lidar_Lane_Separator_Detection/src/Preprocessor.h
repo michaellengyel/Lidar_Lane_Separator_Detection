@@ -8,6 +8,7 @@
 #include "IOHandler.h"
 #include "Scan.h"
 
+
 //============================================================================================================
 // The Preprocessor is a precuresor to the algorithm. It understands the raw data coming from the sensor and
 // filteres out the unneeded data. This may include fixing missing data points by used the 2nd return,
@@ -31,7 +32,7 @@ public:
 
 private:
 
-
+	void filterData(Scan& scan, std::string blocks[]);
 };
 
 #endif
