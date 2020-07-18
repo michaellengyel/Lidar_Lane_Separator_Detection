@@ -54,6 +54,8 @@ void Preprocessor::filterData(Scan& scan, std::string blocks[]) {
 	const unsigned int columnDistance = static_cast<unsigned int>(dataFormatA::DISTANCE);
 	const unsigned int columnIntensity = static_cast<unsigned int>(dataFormatA::INTENSITY);
 
+	const bool filterDuplicateReturn = g_filterDuplicateReturn;
+
 	// Input data config parameters
 	const unsigned int minDistance = static_cast<unsigned int>(algoParameters::MIN_DISTANCE);
 	const unsigned int maxDistance = static_cast<unsigned int>(algoParameters::MAX_DISTANCE);
@@ -64,13 +66,60 @@ void Preprocessor::filterData(Scan& scan, std::string blocks[]) {
 	bool distanceInRange = (std::stod(blocks[columnDistance]) <= maxDistance) && (std::stod(blocks[columnDistance]) > minDistance);
 	bool intensityInRange = (std::stod(blocks[columnIntensity]) <= maxIntensity) && (std::stod(blocks[columnIntensity]) > minIntensity);
 
+	// Duplicate filtering logic
+	// TODO: Refactor
+	bool readingDuplicate = true;
+
+	if (filterDuplicateReturn) {
+		trackDuplicate(blocks);
+		readingDuplicate = m_readingDuplicate;
+	}
+
 	// Filtering
-	if (distanceInRange && intensityInRange) {
+	if (distanceInRange && intensityInRange && readingDuplicate) {
 
 		Scan::Point point(std::stod(blocks[columnX]), std::stod(blocks[columnY]), std::stod(blocks[columnZ]));
 		scan.m_data.push_back(point);
 
 		// TODO: Remove debug function calls
-		// point.printPoint();
+		//point.printPoint();
+	}
+}
+
+void Preprocessor::trackDuplicate(std::string blocks[]) {
+
+	const unsigned int columnLaserID = static_cast<unsigned int>(dataFormatA::LASER_ID);
+
+	// Defines which duplicate frame to use (currently 0, 1 available)
+	const unsigned int usedDuplicate = static_cast<unsigned int>(algoParameters::USED_DUPLICATE);
+	const unsigned int numberOfDuplicate = static_cast<unsigned int>(algoParameters::NUMBER_OF_DUPLICATES);
+
+	int test = std::stod(blocks[columnLaserID]);
+
+	bool endOfFrame = (std::stod(blocks[columnLaserID]) <= m_previousID);
+	bool notfilteredFrame = (m_duplicateCounter == usedDuplicate);
+
+	m_previousID = (std::stod(blocks[columnLaserID]));
+
+	if (endOfFrame) {
+		// Increment or reset the counter
+		if (m_duplicateCounter == (numberOfDuplicate - 1)) {
+			m_duplicateCounter = 0;
+		}
+		else {
+			m_duplicateCounter++;
+		}
+
+		if (notfilteredFrame) {
+			m_readingDuplicate = true;
+			//std::cout << "FALSE" << std::endl;
+		}
+		else {
+			m_readingDuplicate = false;
+			//std::cout << "TRUE" << std::endl;
+		}
+	}
+	else {
+		// Do Nothing
 	}
 }

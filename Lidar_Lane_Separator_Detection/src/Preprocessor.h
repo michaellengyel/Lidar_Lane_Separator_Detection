@@ -33,6 +33,12 @@ public:
 private:
 
 	void filterData(Scan& scan, std::string blocks[]);
+
+	void trackDuplicate(std::string blocks[]);
+
+	bool m_readingDuplicate = false;
+	int m_previousID = 0;
+	int m_duplicateCounter = 0;
 };
 
 #endif
