@@ -15,6 +15,7 @@ int main() {
 	// Declaring data processing classes
 	Preprocessor preprocessor(scan, ioHandler);
 	Detector detector(scan);
+	detector.algorithm();
 
 	// Declaring data and results visualization classes
 	Visualization visualization(scan);

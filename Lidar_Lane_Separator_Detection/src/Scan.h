@@ -51,6 +51,7 @@ public:
 		const double m_zPos = 0;
 		const double m_luminosity = 0;
 
+		// TODO: Remove debug function "printPoint()"
 		void printPoint() {
 			std::cout.precision(17);
 			std::cout << m_xPos << "\t" << m_yPos << "\t" << m_zPos << "\t" << std::endl;

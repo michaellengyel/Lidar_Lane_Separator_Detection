@@ -70,6 +70,7 @@ void Preprocessor::filterData(Scan& scan, std::string blocks[]) {
 		Scan::Point point(std::stod(blocks[columnX]), std::stod(blocks[columnY]), std::stod(blocks[columnZ]));
 		scan.m_data.push_back(point);
 
-		point.printPoint();
+		// TODO: Remove debug function calls
+		// point.printPoint();
 	}
 }

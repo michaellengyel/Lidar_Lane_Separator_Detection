@@ -15,7 +15,7 @@
 class Detector {
 public:
 
-	Detector(const Scan& scan) {
+	Detector(const Scan& scan) : m_scan(scan) {
 
 	}
 
@@ -26,6 +26,8 @@ public:
 	void algorithm();
 
 private:
+
+	const Scan& m_scan;
 
 };
 
