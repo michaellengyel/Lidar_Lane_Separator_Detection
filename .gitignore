@@ -1,11 +1,11 @@
 # Directories
 .vs/
 bin/
-bin_int/
+bin-int/
 #Debug/
 
 # Files
-#*.user
-#.vcxproj
-#.filters
+*.user
+*.vcxproj
+*.filters
 *.csv
