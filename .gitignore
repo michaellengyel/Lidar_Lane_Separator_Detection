@@ -2,10 +2,10 @@
 .vs/
 bin/
 bin-int/
-#Debug/
 
 # Files
 *.user
 *.vcxproj
 *.filters
 *.csv
+*.sln
