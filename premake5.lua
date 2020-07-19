@@ -1,5 +1,6 @@
 workspace "Lidar_Lane_Separator_Detection"
-	architecture "x86"
+
+	platforms { "x86", "x86_64" }
 
 	configurations
 	{
@@ -27,8 +28,17 @@ project "Lidar_Lane_Separator_Detection"
 
 	includedirs
 	{
-		"%{prj.name}/vendor/spdlog/include"
+		"%{prj.name}/vendor/GLFW/include"
 	}
+	
+	links
+	{
+		"opengl32.lib",
+		"glfw3.lib"
+	}
+	
+	libdirs "%{prj.name}/vendor/GLFW/lib-vc2015"
+	--links "foo"
 
 	filter "system:windows"
 		cppdialect "C++14"
@@ -49,12 +59,16 @@ project "Lidar_Lane_Separator_Detection"
 	filter "configurations:Debug"
 		defines "LSD_DEBUG"
 		symbols "On"
+		staticruntime "Off" -- Needed due to glfw3
 
 	filter "configurations:Release"
 		defines "LSD_RELEASE"
 		optimize "On"
+		--buildoptions "/MD" -- Needed due to glfw3
+		staticruntime "Off" -- Needed due to glfw3
 
 	filter "configurations:Distribution"
 		defines "LSD_DISTRIBUTION"
 		symbols "On"
+		staticruntime "Off" -- Needed due to glfw3
 
