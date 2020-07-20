@@ -4,8 +4,9 @@
 
 #ifndef VISUALIZATON
 #define VISUALIZATON
-
 #include "Scan.h"
+
+#include <GLFW/glfw3.h>
 
 //============================================================================================================
 // Class Documentation Placeholder
@@ -22,6 +23,8 @@ public:
 	~Visualization() {
 
 	}
+
+	void render(const Scan& scan);
 
 private:
 
