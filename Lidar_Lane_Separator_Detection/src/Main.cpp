@@ -11,6 +11,14 @@
 
 #include "../vendor/GLM/glm/glm.hpp"
 #include "../vendor/GLM/glm/gtc/matrix_transform.hpp"
+#include "../vendor/GLM/glm/gtc/type_ptr.hpp"
+
+const char *vertexShaderSource = "#version 330 core\n"
+"layout (location = 0) in vec3 aPos;\n"
+"void main()\n"
+"{\n"
+"   gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
+"}\0";
 
 int main() {
 
@@ -45,8 +53,31 @@ int main() {
 	/* Make the window's context current */
 	glfwMakeContextCurrent(window);
 
-	// Making projection Matrix
-	glm::mat4 projection = glm::ortho(-2.0f, 2.0f, -1.5f, 1.5f, -1.0f, 1.0f);
+	// Calling glewInit(must be after valid glfw rendering context)
+	GLenum err = glewInit();
+	if (GLEW_OK != err)
+	{
+		/* Problem: glewInit failed, something is seriously wrong. */
+		fprintf(stderr, "Error: %s\n", glewGetErrorString(err));
+
+	}
+
+	float vertices[] = {
+		-0.5f, -0.5f, 0.0f,
+		0.5f, -0.5f, 0.0f,
+		0.0f,  0.5f, 0.0f
+	};
+
+	unsigned int VBO;
+	glGenBuffers(1, &VBO);
+
+	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+	unsigned int vertexShader;
+	vertexShader = glCreateShader(GL_VERTEX_SHADER);
+
 
 
 	/* Loop until the user closes the window */

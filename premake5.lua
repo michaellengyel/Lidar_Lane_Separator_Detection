@@ -53,7 +53,7 @@ project "Lidar_Lane_Separator_Detection"
 
 		defines
 		{
-
+			"GLEW_STATIC"
 		}
 
 		postbuildcommands
@@ -65,8 +65,8 @@ project "Lidar_Lane_Separator_Detection"
 	filter "configurations:Debug"
 		defines
 		{
-		"LSD_DEBUG",
-		"GLEW_STATIC" -- Needed due to glew
+		"LSD_DEBUG"
+		--"GLEW_STATIC" -- Needed due to glew
 		}
 		symbols "On"
 		staticruntime "Off" -- Needed due to glfw3
@@ -74,8 +74,8 @@ project "Lidar_Lane_Separator_Detection"
 	filter "configurations:Release"
 		defines
 		{
-		"LSD_RELEASE",
-		"GLEW_STATIC" -- Needed due to glew
+		"LSD_RELEASE"
+		--"GLEW_STATIC" -- Needed due to glew
 		}
 		optimize "On"
 		--buildoptions "/MD" -- Needed due to glfw3 (TODO: Remove)
@@ -84,8 +84,8 @@ project "Lidar_Lane_Separator_Detection"
 	filter "configurations:Distribution"
 		defines
 		{
-		"LSD_DISTRIBUTION",
-		"GLEW_STATIC"  -- Needed due to glew
+		"LSD_DISTRIBUTION"
+		--"GLEW_STATIC"  -- Needed due to glew
 		}
 		symbols "On"
 		staticruntime "Off" -- Needed due to glfw3
