@@ -28,16 +28,22 @@ project "Lidar_Lane_Separator_Detection"
 
 	includedirs
 	{
-		"%{prj.name}/vendor/GLFW/include"
-	}
+		"%{prj.name}/vendor/GLFW/include",
+		"%{prj.name}/vendor/GLEW/include"
+	} 
 	
 	links
 	{
 		"opengl32.lib",
-		"glfw3.lib"
+		"glfw3.lib",
+		"glew32s.lib"
 	}
 	
-	libdirs "%{prj.name}/vendor/GLFW/lib-vc2015"
+	libdirs
+	{
+		"%{prj.name}/vendor/GLFW/lib-vc2015",
+		"%{prj.name}/vendor/GLEW/lib/Release/Win32"
+	}
 	--links "foo"
 
 	filter "system:windows"
@@ -57,18 +63,30 @@ project "Lidar_Lane_Separator_Detection"
 		}
 
 	filter "configurations:Debug"
-		defines "LSD_DEBUG"
+		defines
+		{
+		"LSD_DEBUG",
+		"GLEW_STATIC" -- Needed due to glew
+		}
 		symbols "On"
 		staticruntime "Off" -- Needed due to glfw3
 
 	filter "configurations:Release"
-		defines "LSD_RELEASE"
+		defines
+		{
+		"LSD_RELEASE",
+		"GLEW_STATIC" -- Needed due to glew
+		}
 		optimize "On"
-		--buildoptions "/MD" -- Needed due to glfw3
+		--buildoptions "/MD" -- Needed due to glfw3 (TODO: Remove)
 		staticruntime "Off" -- Needed due to glfw3
 
 	filter "configurations:Distribution"
-		defines "LSD_DISTRIBUTION"
+		defines
+		{
+		"LSD_DISTRIBUTION",
+		"GLEW_STATIC"  -- Needed due to glew
+		}
 		symbols "On"
 		staticruntime "Off" -- Needed due to glfw3
 

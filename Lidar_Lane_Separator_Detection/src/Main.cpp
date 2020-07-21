@@ -1,3 +1,6 @@
+#include <GL/glew.h>
+#include <GLFW/glfw3.h>
+
 #include <iostream>
 
 #include "IOHandler.h"
@@ -6,7 +9,8 @@
 #include "Detector.h"
 #include "Visualization.h"
 
-#include <GLFW/glfw3.h>
+#include "../vendor/GLM/glm/glm.hpp"
+#include "../vendor/GLM/glm/gtc/matrix_transform.hpp"
 
 int main() {
 
@@ -41,13 +45,21 @@ int main() {
 	/* Make the window's context current */
 	glfwMakeContextCurrent(window);
 
+	// Making projection Matrix
+	glm::mat4 projection = glm::ortho(-2.0f, 2.0f, -1.5f, 1.5f, -1.0f, 1.0f);
+
+
 	/* Loop until the user closes the window */
 	while (!glfwWindowShouldClose(window))
 	{
+		/* Set background color to white */
+		glClearColor(0.0f, 0.0f, 0.0, 1.0f);
+
 		/* Render here */
 		glClear(GL_COLOR_BUFFER_BIT);
 
 		visualization.render(scan);
+
 
 		/* Swap front and back buffers */
 		glfwSwapBuffers(window);
