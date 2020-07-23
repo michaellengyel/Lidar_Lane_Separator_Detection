@@ -1,4 +1,4 @@
-# Lane Separator Detection (LSD)
+# Lane Separator Detection Function
 
 Detection of Lane Separators based on LIDAR data.   
 
@@ -15,6 +15,7 @@ Windows 10
 4. Open generated .sln file in repository   
 5. Set configuration to "Release"   
 6. Build and run software with ctrl+F5   
+7. Use WASD keys and Mouse to change position in displayed point cloud   
 
 ## Used Sources
 

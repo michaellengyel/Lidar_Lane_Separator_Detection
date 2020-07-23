@@ -8,6 +8,7 @@
 #include "Preprocessor.h"
 #include "Detector.h"
 #include "Visualization.h"
+#include "Enumerations.h"
 
 #include "Shader.h"
 
@@ -34,7 +35,7 @@ float yaw = -90.0f;	// yaw is initialized to -90.0 degrees since a yaw of 0.0 re
 float pitch = 0.0f;
 float lastX = 800.0f / 2.0;
 float lastY = 600.0 / 2.0;
-float fov = 45.0f;
+float fov = 60.0f;
 
 // timing
 float deltaTime = 0.0f;	// time between current frame and last frame
@@ -53,6 +54,7 @@ int main() {
 
 	// Declaring data and results visualization classes
 	Visualization visualization(scan);
+	visualization.transformToArray();
 
 	// ********** Start of GLFW test code **********
 
@@ -63,7 +65,7 @@ int main() {
 		return -1;
 
 	/* Create a windowed mode window and its OpenGL context */
-	window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "LSD Visulization", NULL, NULL);
+	window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "Lane Separator Detection Visulization", NULL, NULL);
 	if (!window)
 	{
 		glfwTerminate();
@@ -97,25 +99,7 @@ int main() {
 	Shader ourShader("shaders/5.1.transform.vs", "shaders/5.1.transform.fs");
 	
 	/* Creating vertex shader */
-	float vertices[] = {
-		-1.0f, 0.0f, 0.0f,
-		0.5f, -0.5f, 0.0f,
-		0.0f,  0.5f, 0.0f,
-		0.34, -0.11, 0.01,
-		-0.5, 0.7, -0.9,
-		-0.8, 0.5, 0,
-		0.3, 0.3, 0.2,
-		-0.2, 0.7, 0.32,
-		0.28, -0.53, 0.25,
-		0.93, 0.33, 0.52,
-		-0.35, 0.17, -0.19,
-		0.48, -0.85, -0.18,
-		-0.28, 0.57, 0,
-		0.93, -0.33, 0.82,
-		-0.42, -0.7, 0.32,
-		0.28, -0.53, 0.25,
-		0.53, 0.3, -0.52,
-	};
+	//visualization.m_vertices;
 
 	unsigned int VBO, VAO;
 	glGenVertexArrays(1, &VAO);
@@ -124,7 +108,7 @@ int main() {
 	glBindVertexArray(VAO);
 
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(visualization.m_vertices), visualization.m_vertices, GL_STATIC_DRAW);
 
 	// position attribute
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
@@ -147,7 +131,7 @@ int main() {
 	//trans = glm::rotate(trans, glm::radians(90.0f), glm::vec3(0.0, 0.0, 1.0));
 	//trans = glm::scale(trans, glm::vec3(0.5, 0.5, 0.5));
 
-	unsigned int transformLoc = glGetUniformLocation(ourShader.ID, "transform");
+	//unsigned int transformLoc = glGetUniformLocation(ourShader.ID, "transform");
 	//glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(trans));
 
 	/* Loop until the user closes the window */
@@ -176,7 +160,7 @@ int main() {
 		ourShader.use();
 
 		// pass projection matrix to shader (note that in this case it could change every frame)
-		glm::mat4 projection = glm::perspective(glm::radians(fov), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
+		glm::mat4 projection = glm::perspective(glm::radians(fov), (float)SCR_WIDTH / (float)SCR_HEIGHT, 1.0f, 300.0f);
 		ourShader.setMat4("projection", projection);
 
 		// camera/view transformation
@@ -202,8 +186,8 @@ int main() {
 		model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
 		ourShader.setMat4("model", model);
 
-		glPointSize(5);
-		glDrawArrays(GL_POINTS, 0, 90); // <- Set Number of points to be rendered from VAO here
+		glPointSize(3);
+		glDrawArrays(GL_POINTS, 0, g_points); // <- Set Number of points to be rendered from VAO here
 
 		/* Swap front and back buffers */
 		glfwSwapBuffers(window);
@@ -227,7 +211,7 @@ void processInput(GLFWwindow *window)
 	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
 		glfwSetWindowShouldClose(window, true);
 
-	float cameraSpeed = 2.5 * deltaTime;
+	float cameraSpeed = 5 * deltaTime;
 	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
 		cameraPos += cameraSpeed * cameraFront;
 	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
@@ -263,7 +247,7 @@ void mouse_callback(GLFWwindow* window, double xpos, double ypos)
 	lastX = xpos;
 	lastY = ypos;
 
-	float sensitivity = 0.1f; // change this value to your liking
+	float sensitivity = 0.3f; // change this value to your liking
 	xoffset *= sensitivity;
 	yoffset *= sensitivity;
 

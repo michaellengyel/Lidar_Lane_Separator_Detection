@@ -40,4 +40,6 @@ enum class vehicleParameters : unsigned int
 
 constexpr bool g_filterDuplicateReturn = true; // Turn filtering of duplicates on and off
 
+constexpr int g_points = 30000; // TODO: Refactor logic
+
 #endif // !ENUMERATIONS

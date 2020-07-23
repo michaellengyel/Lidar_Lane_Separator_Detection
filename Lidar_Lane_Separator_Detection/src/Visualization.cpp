@@ -37,3 +37,16 @@ void Visualization::render(const Scan& scan) {
 
 	
 }
+
+// Temporary code, TODO: Refactor
+void Visualization::transformToArray() {
+
+	float vertices[m_elements];
+
+	for (int i = 0; i < m_elements; i+=m_dimensions) {
+		m_vertices[i] = m_scan.m_data[i].m_xPos;
+		m_vertices[i + 1] = m_scan.m_data[i].m_yPos;
+		m_vertices[i + 2] = m_scan.m_data[i].m_zPos;
+	}
+
+}
