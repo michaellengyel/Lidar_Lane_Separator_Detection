@@ -35,7 +35,7 @@ float yaw = -90.0f;	// yaw is initialized to -90.0 degrees since a yaw of 0.0 re
 float pitch = 0.0f;
 float lastX = 800.0f / 2.0;
 float lastY = 600.0 / 2.0;
-float fov = 60.0f;
+float fov = 45.0f;
 
 // timing
 float deltaTime = 0.0f;	// time between current frame and last frame
@@ -44,7 +44,7 @@ float lastFrame = 0.0f;
 int main() {
 
 	// Declaring data container and handling classes
-	IOHandler ioHandler("res/1.csv");
+	IOHandler ioHandler("res/4.csv");
 	Scan scan;
 
 	// Declaring data processing classes
@@ -111,11 +111,12 @@ int main() {
 	glBufferData(GL_ARRAY_BUFFER, sizeof(visualization.m_vertices), visualization.m_vertices, GL_STATIC_DRAW);
 
 	// position attribute
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
+	//glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
 	glEnableVertexAttribArray(0);
 	// texture coord attribute
-	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
-	glEnableVertexAttribArray(1);
+	//glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
+	//glEnableVertexAttribArray(1);
 
 	/* Adding use of shaders */
 	ourShader.use();
@@ -147,8 +148,8 @@ int main() {
 		// -----
 		processInput(window);
 
-		/* Set background color to white */
-		glClearColor(0.8f, 0.8f, 0.8, 1.0f);
+		/* Set background color to black */
+		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
 		/* Render here */
 		//glClear(GL_COLOR_BUFFER_BIT);
@@ -160,7 +161,7 @@ int main() {
 		ourShader.use();
 
 		// pass projection matrix to shader (note that in this case it could change every frame)
-		glm::mat4 projection = glm::perspective(glm::radians(fov), (float)SCR_WIDTH / (float)SCR_HEIGHT, 1.0f, 300.0f);
+		glm::mat4 projection = glm::perspective(glm::radians(fov), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 300.0f);
 		ourShader.setMat4("projection", projection);
 
 		// camera/view transformation
@@ -168,9 +169,9 @@ int main() {
 		ourShader.setMat4("view", view);
 
 		// create transformations
-		glm::mat4 transform = glm::mat4(1.0f); // make sure to initialize matrix to identity matrix first
-		transform = glm::translate(transform, glm::vec3(0.0f, 0.0f, 0.0f));
-		transform = glm::rotate(transform, (float)glfwGetTime(), glm::vec3(0.0f, 1.0f, 0.0f));
+		//glm::mat4 transform = glm::mat4(1.0f); // make sure to initialize matrix to identity matrix first
+		//transform = glm::translate(transform, glm::vec3(0.0f, 0.0f, 0.0f));
+		//transform = glm::rotate(transform, (float)glfwGetTime(), glm::vec3(0.0f, 1.0f, 0.0f));
 
 		// get matrix's uniform location and set matrix
 		// unsigned int transformLoc = glGetUniformLocation(ourShader.ID, "transform");
@@ -178,15 +179,15 @@ int main() {
 
 
 		// render container
-		glBindVertexArray(VAO);
+		// glBindVertexArray(VAO);
 
 		glm::mat4 model = glm::mat4(1.0f); // make sure to initialize matrix to identity matrix first
 		model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f));
-		float angle = 20.0f;
-		model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
+		float angle = 0.0f;
+		model = glm::rotate(model, glm::radians(angle), glm::vec3(0.0f, 0.0f, 1.0f));
 		ourShader.setMat4("model", model);
 
-		glPointSize(3);
+		glPointSize(0);
 		glDrawArrays(GL_POINTS, 0, g_points); // <- Set Number of points to be rendered from VAO here
 
 		/* Swap front and back buffers */
@@ -264,6 +265,7 @@ void mouse_callback(GLFWwindow* window, double xpos, double ypos)
 	front.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
 	front.y = sin(glm::radians(pitch));
 	front.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
+
 	cameraFront = glm::normalize(front);
 }
 

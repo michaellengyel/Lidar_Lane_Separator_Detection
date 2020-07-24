@@ -25,7 +25,7 @@ enum class dataFormatA : unsigned int
 enum class algoParameters : unsigned int
 {
 	MIN_DISTANCE = 0,
-	MAX_DISTANCE = 255,
+	MAX_DISTANCE = 30,
 	MIN_INTENSITY = 0,
 	MAX_INTENSITY = 255,
 	//LASER_ID = 0
@@ -40,6 +40,6 @@ enum class vehicleParameters : unsigned int
 
 constexpr bool g_filterDuplicateReturn = true; // Turn filtering of duplicates on and off
 
-constexpr int g_points = 30000; // TODO: Refactor logic
+constexpr int g_points = 80000; // TODO: Refactor logic
 
 #endif // !ENUMERATIONS
