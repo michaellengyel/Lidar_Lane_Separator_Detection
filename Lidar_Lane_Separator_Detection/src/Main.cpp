@@ -35,7 +35,7 @@ float yaw = -90.0f;	// yaw is initialized to -90.0 degrees since a yaw of 0.0 re
 float pitch = 0.0f;
 float lastX = 800.0f / 2.0;
 float lastY = 600.0 / 2.0;
-float fov = 45.0f;
+float fov = 60.0f;
 
 // timing
 float deltaTime = 0.0f;	// time between current frame and last frame
@@ -56,15 +56,15 @@ int main() {
 	Visualization visualization(scan);
 	visualization.transformToArray();
 
-	// ********** Start of GLFW test code **********
+	// ****************************** Start of GLFW code ******************************
 
 	GLFWwindow* window;
 
-	/* Initialize the library */
+	// Initialize the library
 	if (!glfwInit())
 		return -1;
 
-	/* Create a windowed mode window and its OpenGL context */
+	// Create a windowed mode window and its OpenGL context
 	window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "Lane Separator Detection Visulization", NULL, NULL);
 	if (!window)
 	{
@@ -72,7 +72,7 @@ int main() {
 		return -1;
 	}
 
-	/* Make the window's context current */
+	// Make the window's context current
 	glfwMakeContextCurrent(window);
 	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 	glfwSetCursorPosCallback(window, mouse_callback);
@@ -91,16 +91,12 @@ int main() {
 	}
 
 	// configure global opengl state
-	// -----------------------------
 	glEnable(GL_DEPTH_TEST);
 
 	// build and compile our shader zprogram
-	// ------------------------------------
 	Shader ourShader("shaders/5.1.transform.vs", "shaders/5.1.transform.fs");
 	
-	/* Creating vertex shader */
-	//visualization.m_vertices;
-
+	// Creating vertex shader
 	unsigned int VBO, VAO;
 	glGenVertexArrays(1, &VAO);
 	glGenBuffers(1, &VBO);
@@ -111,48 +107,27 @@ int main() {
 	glBufferData(GL_ARRAY_BUFFER, sizeof(visualization.m_vertices), visualization.m_vertices, GL_STATIC_DRAW);
 
 	// position attribute
-	//glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
 	glEnableVertexAttribArray(0);
-	// texture coord attribute
-	//glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
-	//glEnableVertexAttribArray(1);
 
 	/* Adding use of shaders */
 	ourShader.use();
-
-	/* Handling maths */
-	//glm::vec4 vec(1.0f, 0.0f, 0.0f, 1.0f);
-	//glm::mat4 trans = glm::mat4(1.0f);
-	//trans = glm::translate(trans, glm::vec3(1.0f, 1.0f, 0.0f));
-	//vec = trans * vec;
-	//std::cout << vec.x << vec.y << vec.z << std::endl;
-
-	//glm::mat4 trans = glm::mat4(1.0f);
-	//trans = glm::rotate(trans, glm::radians(90.0f), glm::vec3(0.0, 0.0, 1.0));
-	//trans = glm::scale(trans, glm::vec3(0.5, 0.5, 0.5));
-
-	//unsigned int transformLoc = glGetUniformLocation(ourShader.ID, "transform");
-	//glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(trans));
 
 	/* Loop until the user closes the window */
 	while (!glfwWindowShouldClose(window))
 	{
 		// per-frame time logic
-		// --------------------
 		float currentFrame = glfwGetTime();
 		deltaTime = currentFrame - lastFrame;
 		lastFrame = currentFrame;
 
 		// input
-		// -----
 		processInput(window);
 
-		/* Set background color to black */
+		// Set background color to black
 		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
-		/* Render here */
-		//glClear(GL_COLOR_BUFFER_BIT);
+		// Clear buffers
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		//visualization.render(scan);
@@ -169,25 +144,13 @@ int main() {
 		ourShader.setMat4("view", view);
 
 		// create transformations
-		//glm::mat4 transform = glm::mat4(1.0f); // make sure to initialize matrix to identity matrix first
-		//transform = glm::translate(transform, glm::vec3(0.0f, 0.0f, 0.0f));
-		//transform = glm::rotate(transform, (float)glfwGetTime(), glm::vec3(0.0f, 1.0f, 0.0f));
-
-		// get matrix's uniform location and set matrix
-		// unsigned int transformLoc = glGetUniformLocation(ourShader.ID, "transform");
-		// glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(transform));
-
-
-		// render container
-		// glBindVertexArray(VAO);
-
 		glm::mat4 model = glm::mat4(1.0f); // make sure to initialize matrix to identity matrix first
 		model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f));
 		float angle = 0.0f;
 		model = glm::rotate(model, glm::radians(angle), glm::vec3(0.0f, 0.0f, 1.0f));
 		ourShader.setMat4("model", model);
 
-		glPointSize(0);
+		glPointSize(0); // <- Set size of points
 		glDrawArrays(GL_POINTS, 0, g_points); // <- Set Number of points to be rendered from VAO here
 
 		/* Swap front and back buffers */
@@ -199,14 +162,12 @@ int main() {
 
 	glfwTerminate();
 
-	// ********** End of GLFW test code **********
-
+	// ****************************** End of GLFW code ******************************
 
 	return 0;
 }
 
 // process all input: query GLFW whether relevant keys are pressed/released this frame and react accordingly
-// ---------------------------------------------------------------------------------------------------------
 void processInput(GLFWwindow *window)
 {
 	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
@@ -224,7 +185,6 @@ void processInput(GLFWwindow *window)
 }
 
 // glfw: whenever the window size changed (by OS or user resize) this callback function executes
-// ---------------------------------------------------------------------------------------------
 void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 {
 	// make sure the viewport matches the new window dimensions; note that width and 
@@ -233,7 +193,6 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 }
 
 // glfw: whenever the mouse moves, this callback is called
-// -------------------------------------------------------
 void mouse_callback(GLFWwindow* window, double xpos, double ypos)
 {
 	if (firstMouse)
@@ -270,7 +229,6 @@ void mouse_callback(GLFWwindow* window, double xpos, double ypos)
 }
 
 // glfw: whenever the mouse scroll wheel scrolls, this callback is called
-// ----------------------------------------------------------------------
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 {
 	fov -= (float)yoffset;
