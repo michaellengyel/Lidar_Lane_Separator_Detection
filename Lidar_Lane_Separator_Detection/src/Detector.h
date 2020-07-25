@@ -6,6 +6,7 @@
 #define DETECTOR
 
 #include "Scan.h"
+#include "Segment.h"
 
 //============================================================================================================
 // Class Documentation Placeholder
@@ -24,6 +25,8 @@ public:
 	}
 
 	void algorithm();
+
+	Segment m_segment;
 
 private:
 

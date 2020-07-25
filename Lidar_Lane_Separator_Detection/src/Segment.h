@@ -30,8 +30,22 @@ public:
 
 	}
 
-	const Point m_start;
-	const Point m_end;
+	// Copy constructor
+	Segment(const Segment &s) {
+		m_start = s.m_start;
+		m_end = s.m_end;
+	}
+
+	// Assignment operator overloading
+	Segment& operator = (const Segment& rhs) {
+		m_start = rhs.m_start;
+		m_end = rhs.m_end;
+		return *this;
+	}
+	
+
+	Point m_start;
+	Point m_end;
 
 };
 

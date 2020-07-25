@@ -11,4 +11,10 @@ void Detector::algorithm() {
 
 	std::cout << all/ m_scan.m_data.size() << std::endl;
 
+	// Setting up mock data
+	Point point1(-1.7f, -30.0f, -2.3f);
+	Point point2(-1.7f, 30.0f, -2.3f);
+	Segment segment(point1, point2);
+	m_segment = segment;
+
 }
