@@ -42,9 +42,9 @@ void Visualization::render(const Scan& scan) {
 void Visualization::transformToArray() {
 
 	for (int i = 0, j = 0; i < m_elements; i+=m_dimensions, j++) {
-		m_vertices[i] = m_scan.m_data[j].m_xPos;
-		m_vertices[i + 1] = m_scan.m_data[j].m_yPos;
-		m_vertices[i + 2] = m_scan.m_data[j].m_zPos;
+		m_vertices[i] = m_scan.m_data[j].m_point.m_xPos;
+		m_vertices[i + 1] = m_scan.m_data[j].m_point.m_yPos;
+		m_vertices[i + 2] = m_scan.m_data[j].m_point.m_zPos;
 	}
 
 }

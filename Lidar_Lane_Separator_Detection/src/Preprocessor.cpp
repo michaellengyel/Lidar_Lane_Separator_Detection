@@ -1,5 +1,6 @@
 #include "Preprocessor.h"
 #include "Enumerations.h"
+#include "Point.h"
 
 void Preprocessor::loadScan(Scan& scan, IOHandler& ioHandler) {
 
@@ -78,7 +79,8 @@ void Preprocessor::filterData(Scan& scan, std::string blocks[]) {
 	// Filtering
 	if (distanceInRange && intensityInRange && readingDuplicate) {
 
-		Scan::Point point(std::stod(blocks[columnX]), std::stod(blocks[columnY]), std::stod(blocks[columnZ]));
+		Point point(std::stod(blocks[columnX]), std::stod(blocks[columnY]), std::stod(blocks[columnZ]));
+		Scan::Pulse pulse(point);
 		scan.m_data.push_back(point);
 
 		// TODO: Remove debug function calls
