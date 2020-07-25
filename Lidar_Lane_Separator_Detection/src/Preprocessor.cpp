@@ -1,6 +1,4 @@
 #include "Preprocessor.h"
-#include "Enumerations.h"
-#include "Point.h"
 
 void Preprocessor::loadScan(Scan& scan, IOHandler& ioHandler) {
 
@@ -48,24 +46,9 @@ void Preprocessor::loadScan(Scan& scan, IOHandler& ioHandler) {
 
 void Preprocessor::filterData(Scan& scan, std::string blocks[]) {
 
-	// Input file config parameters
-	const unsigned int columnX = static_cast<unsigned int>(dataFormatA::COLUMN_X);
-	const unsigned int columnY = static_cast<unsigned int>(dataFormatA::COLUMN_Y);
-	const unsigned int columnZ = static_cast<unsigned int>(dataFormatA::COLUMN_Z);
-	const unsigned int columnDistance = static_cast<unsigned int>(dataFormatA::DISTANCE);
-	const unsigned int columnIntensity = static_cast<unsigned int>(dataFormatA::INTENSITY);
-
-	const bool filterDuplicateReturn = g_filterDuplicateReturn;
-
-	// Input data config parameters
-	const unsigned int minDistance = static_cast<unsigned int>(algoParameters::MIN_DISTANCE);
-	const unsigned int maxDistance = static_cast<unsigned int>(algoParameters::MAX_DISTANCE);
-	const unsigned int minIntensity = static_cast<unsigned int>(algoParameters::MIN_INTENSITY);
-	const unsigned int maxIntensity = static_cast<unsigned int>(algoParameters::MAX_INTENSITY);
-
 	// Filtering logic
-	bool distanceInRange = (std::stod(blocks[columnDistance]) <= maxDistance) && (std::stod(blocks[columnDistance]) > minDistance);
-	bool intensityInRange = (std::stod(blocks[columnIntensity]) <= maxIntensity) && (std::stod(blocks[columnIntensity]) > minIntensity);
+	bool distanceInRange = (std::stod(blocks[m_columnDistance]) <= maxDistance) && (std::stod(blocks[m_columnDistance]) > minDistance);
+	bool intensityInRange = (std::stod(blocks[m_columnIntensity]) <= maxIntensity) && (std::stod(blocks[m_columnIntensity]) > minIntensity);
 
 	// Duplicate filtering logic
 	// TODO: Refactor
@@ -79,7 +62,7 @@ void Preprocessor::filterData(Scan& scan, std::string blocks[]) {
 	// Filtering
 	if (distanceInRange && intensityInRange && readingDuplicate) {
 
-		Point point(std::stod(blocks[columnX]), std::stod(blocks[columnY]), std::stod(blocks[columnZ]));
+		Point point(std::stod(blocks[m_columnX]), std::stod(blocks[m_columnY]), std::stod(blocks[m_columnZ]));
 		Scan::Pulse pulse(point);
 		scan.m_data.push_back(point);
 
@@ -90,22 +73,14 @@ void Preprocessor::filterData(Scan& scan, std::string blocks[]) {
 
 void Preprocessor::trackDuplicate(std::string blocks[]) {
 
-	const unsigned int columnLaserID = static_cast<unsigned int>(dataFormatA::LASER_ID);
+	bool endOfFrame = (std::stod(blocks[m_columnLaserID]) <= m_previousID);
+	bool notfilteredFrame = (m_duplicateCounter == m_usedDuplicate);
 
-	// Defines which duplicate frame to use (currently 0, 1 available)
-	const unsigned int usedDuplicate = static_cast<unsigned int>(algoParameters::USED_DUPLICATE);
-	const unsigned int numberOfDuplicate = static_cast<unsigned int>(algoParameters::NUMBER_OF_DUPLICATES);
-
-	int test = std::stod(blocks[columnLaserID]);
-
-	bool endOfFrame = (std::stod(blocks[columnLaserID]) <= m_previousID);
-	bool notfilteredFrame = (m_duplicateCounter == usedDuplicate);
-
-	m_previousID = (std::stod(blocks[columnLaserID]));
+	m_previousID = (std::stod(blocks[m_columnLaserID]));
 
 	if (endOfFrame) {
 		// Increment or reset the counter
-		if (m_duplicateCounter == (numberOfDuplicate - 1)) {
+		if (m_duplicateCounter == (m_numberOfDuplicate - 1)) {
 			m_duplicateCounter = 0;
 		}
 		else {

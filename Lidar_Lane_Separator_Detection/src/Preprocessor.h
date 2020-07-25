@@ -5,9 +5,10 @@
 #ifndef PREPROCESSOR
 #define PREPROCESSOR
 
+#include "Enumerations.h"
 #include "IOHandler.h"
+#include "Point.h"
 #include "Scan.h"
-
 
 //============================================================================================================
 // The Preprocessor is a precuresor to the algorithm. It understands the raw data coming from the sensor and
@@ -35,6 +36,26 @@ private:
 	void filterData(Scan& scan, std::string blocks[]);
 
 	void trackDuplicate(std::string blocks[]);
+
+	// Input file config parameters
+	const unsigned int m_columnX = static_cast<unsigned int>(dataFormatA::COLUMN_X);
+	const unsigned int m_columnY = static_cast<unsigned int>(dataFormatA::COLUMN_Y);
+	const unsigned int m_columnZ = static_cast<unsigned int>(dataFormatA::COLUMN_Z);
+	const unsigned int m_columnDistance = static_cast<unsigned int>(dataFormatA::DISTANCE);
+	const unsigned int m_columnIntensity = static_cast<unsigned int>(dataFormatA::INTENSITY);
+	const unsigned int m_columnLaserID = static_cast<unsigned int>(dataFormatA::LASER_ID);
+
+	const bool filterDuplicateReturn = g_filterDuplicateReturn;
+
+	// Input data config parameters
+	const unsigned int minDistance = static_cast<unsigned int>(algoParameters::MIN_DISTANCE);
+	const unsigned int maxDistance = static_cast<unsigned int>(algoParameters::MAX_DISTANCE);
+	const unsigned int minIntensity = static_cast<unsigned int>(algoParameters::MIN_INTENSITY);
+	const unsigned int maxIntensity = static_cast<unsigned int>(algoParameters::MAX_INTENSITY);
+
+	// Defines which duplicate frame to use (currently 0, 1 available)
+	const unsigned int m_usedDuplicate = static_cast<unsigned int>(algoParameters::USED_DUPLICATE);
+	const unsigned int m_numberOfDuplicate = static_cast<unsigned int>(algoParameters::NUMBER_OF_DUPLICATES);
 
 	bool m_readingDuplicate = false;
 	int m_previousID = 0;
