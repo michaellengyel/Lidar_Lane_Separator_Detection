@@ -150,8 +150,30 @@ int main() {
 		model = glm::rotate(model, glm::radians(angle), glm::vec3(0.0f, 0.0f, 1.0f));
 		ourShader.setMat4("model", model);
 
+		glm::vec4 color = glm::vec4(0.0f, 1.0f, 0.0f, 1.0f);
+		ourShader.setVec4("color", color);
+
 		glPointSize(0); // <- Set size of points
 		glDrawArrays(GL_POINTS, 0, g_points); // <- Set Number of points to be rendered from VAO here
+
+		// Separator Line Rendering Test Code Start
+		color = glm::vec4(1.0f, 0.0f, 0.0f, 1.0f);
+		ourShader.setVec4("color", color);
+
+		glLineWidth(5);
+		glBegin(GL_LINES);
+		glColor3f(0.0f, 0.0f, 1.0f);
+
+		// Line 1
+		glVertex3f(-1.7f, -30.0f, -2.3f);
+		glVertex3f(-1.7f, 30.0f, -2.3f);
+
+		// Line 2
+		//glVertex3f(-0.5f, -0.4f, -0.1f);
+		//glVertex3f(-0.9f, -0.8f, -0.1f);
+
+		glEnd();
+		// Separator Line Rendering Test Code End
 
 		/* Swap front and back buffers */
 		glfwSwapBuffers(window);

@@ -6,9 +6,10 @@ out vec4 vertexColor; // specify a color output to the fragment shader
 uniform mat4 model;
 uniform mat4 view;
 uniform mat4 projection;
+uniform vec4 color;
 
 void main()
 {
     gl_Position = projection * view * model * vec4(aPos, 5.0f);
-	vertexColor = vec4(0.0, 1.0, 0.0, 1.0); // set the color of the points
+	vertexColor = color; // set the color of the points
 } 
