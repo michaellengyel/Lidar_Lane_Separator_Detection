@@ -1,0 +1,3 @@
+[submodule "Lidar_Lane_Separator_Detection/vendor/googletest"]
+	path = Lidar_Lane_Separator_Detection/vendor/googletest
+	url = https://github.com/google/googletest.git

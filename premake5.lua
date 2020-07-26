@@ -90,3 +90,101 @@ project "Lidar_Lane_Separator_Detection"
 		symbols "On"
 		staticruntime "Off" -- Needed due to glfw3
 
+--Project GoogleTest
+project "GoogleTest"
+	location "GoogleTest"
+	kind "StaticLib"
+	language "C++"
+
+	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
+	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
+
+	files
+	{
+		--"%{prj.name}/src/**.h",
+		--"%{prj.name}/src/**.cpp"
+		--TODO: Generalize these paths:
+		"%{wks.location}/Lidar_Lane_Separator_Detection/vendor/googletest/googletest/src/gtest_main.cc",
+		"%{wks.location}/Lidar_Lane_Separator_Detection/vendor/googletest/googletest/src/gtest-all.cc"
+	}
+
+	includedirs
+	{
+		"Lidar_Lane_Separator_Detection/vendor/googletest/googletest/include",
+		"Lidar_Lane_Separator_Detection/vendor/googletest/googletest",
+	}
+
+	links
+	{
+		"Lidar_Lane_Separator_Detection"
+	}
+
+	filter "system:windows"
+		cppdialect "C++14"
+		staticruntime "On"
+		systemversion "10.0.18362.0"
+
+		defines
+		{
+			"LSD_PLATFORM_WINDOWS",
+		}
+
+	filter "configurations:Debug"
+		defines "LSD_DEBUG"
+		symbols "On"
+
+	filter "configurations:Release"
+		defines "LSD_RELEASE"
+		optimize "On"
+
+	filter "configurations:Distribution"
+		defines "LSD_DISTRIBUTION"
+		symbols "On"
+
+--Project UnitTest
+project "UnitTest"
+	location "UnitTest"
+	kind "ConsoleApp"
+	language "C++"
+
+	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
+	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
+
+	files
+	{
+		"%{prj.name}/src/**.h",
+		"%{prj.name}/src/**.cpp"
+	}
+
+	includedirs
+	{
+		"Lidar_Lane_Separator_Detection/vendor/googletest/googletest/include",
+		"Lidar_Lane_Separator_Detection/vendor/googletest/googletest",
+		"Lidar_Lane_Separator_Detection/src"
+		--"Altair/src/Altair",
+,
+	}
+
+	links
+	{
+		"Lidar_Lane_Separator_Detection",
+		"GoogleTest"
+	}
+
+	filter "system:windows"
+		cppdialect "C++14"
+		staticruntime "On"
+		systemversion "10.0.18362.0"
+
+		defines
+		{
+			"LSD_PLATFORM_WINDOWS",
+		}
+
+	filter "configurations:Debug"
+		defines "LSD_DEBUG"
+		symbols "On"
+
+	filter "configurations:Release"
+		defines "LSD_RELEASE"
+		optimize "On"

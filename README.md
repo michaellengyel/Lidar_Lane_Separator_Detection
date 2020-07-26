@@ -14,8 +14,9 @@ Windows 10
 3. Run GenerateProject.bat   
 4. Open generated .sln file in repository   
 5. Set configuration to "Release"   
-6. Build and run software with ctrl+F5   
-7. Use WASD keys and Mouse to change position in displayed point cloud   
+6. Make sure Lidar_Lane_Separator_Detection is "Set as StartUp Project"
+7. Build and run software with ctrl+F5   
+8. Use WASD keys and Mouse to change position in displayed point cloud   
 
 ## Used Sources
 
