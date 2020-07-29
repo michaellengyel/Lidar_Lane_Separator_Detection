@@ -34,10 +34,13 @@ public:
 
 private:
 
+	// The cluster function sorts all the x (perpendicular) values of all Pulses stored in
+	// a Scan, into individual vector containers representing a box in space. The number of
+	// boxes should be a configurable value.
 	void cluster();
 
-	void slidingWindow_1();
-	void slidingWindow_2();
+	void slidingWindow(std::vector<double> &box, double& result);
+
 	double m_frontLeft = 0;
 	double m_RearLeft = 0;
 

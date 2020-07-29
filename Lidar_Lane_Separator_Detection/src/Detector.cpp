@@ -23,8 +23,8 @@ void Detector::algorithm() {
 	*/
 
 	// Sliding window functions
-	slidingWindow_1();
-	slidingWindow_2();
+	slidingWindow(m_xFrontLeft, m_frontLeft);
+	slidingWindow(m_xRearLeft, m_RearLeft);
 	
 	std::cout << "Number of pulse points: " << m_scan.m_data.size() << std::endl;
 
@@ -90,17 +90,17 @@ void Detector::cluster() {
 	std::cout << "m_xRearLeft" << m_xRearLeft.size() << std::endl;
 }
 
-void Detector::slidingWindow_1() {
+void Detector::slidingWindow(std::vector<double> &box, double& result) {
 
 	// Calculate average of points 
 	double average = 0;
 	double total = 0;
 
-	for (int i = 0; i < m_xFrontLeft.size() - 1; i++) {
-		total += (m_xFrontLeft.at(i) - m_xFrontLeft.at(i + 1));
+	for (int i = 0; i < box.size() - 1; i++) {
+		total += (box.at(i) - box.at(i + 1));
 	}
 
-	average = total / m_xFrontLeft.size();
+	average = total / box.size();
 	std::cout << "Average: " << average << std::endl;
 
 	// Sliding window
@@ -108,52 +108,17 @@ void Detector::slidingWindow_1() {
 
 
 	// Pooling ALGO #1
-	for (int i = 0; i < m_xFrontLeft.size() - WINDOW_SIZE; i++) {
+	for (int i = 0; i < box.size() - WINDOW_SIZE; i++) {
 		double windowTotal = 0;
 		for (int j = 0; j < WINDOW_SIZE - 1; j++) {
-			windowTotal += (m_xFrontLeft.at(i + j) - m_xFrontLeft.at(i + j + 1));
+			windowTotal += (box.at(i + j) - box.at(i + j + 1));
 		}
 		double windowAverage = windowTotal / WINDOW_SIZE;
 		//std::cout << "windowAverage: " << windowAverage << std::endl;
 		if ((windowAverage * 4) < average) {
 			std::cout << "PING" << std::endl;
-			std::cout << m_xFrontLeft.at(i) << std::endl;
-			m_frontLeft = m_xFrontLeft.at(i);
-			return;
-		}
-
-	}
-}
-
-void Detector::slidingWindow_2() {
-
-	// Calculate average of points 
-	double average = 0;
-	double total = 0;
-
-	for (int i = 0; i < m_xRearLeft.size() - 1; i++) {
-		total += (m_xRearLeft.at(i) - m_xRearLeft.at(i + 1));
-	}
-
-	average = total / m_xRearLeft.size();
-	std::cout << "Average: " << average << std::endl;
-
-	// Sliding window
-	const int WINDOW_SIZE = 1000;
-
-
-	// Pooling ALGO #1
-	for (int i = 0; i < m_xRearLeft.size() - WINDOW_SIZE; i++) {
-		double windowTotal = 0;
-		for (int j = 0; j < WINDOW_SIZE - 1; j++) {
-			windowTotal += (m_xRearLeft.at(i + j) - m_xRearLeft.at(i + j + 1));
-		}
-		double windowAverage = windowTotal / WINDOW_SIZE;
-		//std::cout << "windowAverage: " << windowAverage << std::endl;
-		if ((windowAverage * 4) < average) {
-			std::cout << "PING" << std::endl;
-			std::cout << m_xRearLeft.at(i) << std::endl;
-			m_RearLeft = m_xFrontLeft.at(i);
+			std::cout << box.at(i) << std::endl;
+			result = box.at(i);
 			return;
 		}
 
