@@ -6,9 +6,12 @@ void Detector::algorithm() {
 	cluster();
 
 	// Sort all datapoints in all slices based on size of x component
+
+	// Right Side
 	std::sort(m_xFrontRight.begin(), m_xFrontRight.end(), std::greater<double>());
 	std::sort(m_xRearRight.begin(), m_xRearRight.end(), std::greater<double>());
 
+	// Left Side
 	std::sort(m_xFrontLeft.begin(), m_xFrontLeft.end(), std::greater<double>());
 	std::sort(m_xRearLeft.begin(), m_xRearLeft.end(), std::greater<double>());
 
@@ -22,7 +25,11 @@ void Detector::algorithm() {
 	}
 	*/
 
-	// Sliding window functions
+	// Sliding window functions (Right side)
+	slidingWindow(m_xFrontRight, m_frontRight);
+	slidingWindow(m_xRearRight, m_RearRight);
+
+	// Sliding window functions (Left side)
 	slidingWindow(m_xFrontLeft, m_frontLeft);
 	slidingWindow(m_xRearLeft, m_RearLeft);
 	
@@ -40,11 +47,19 @@ void Detector::algorithm() {
 	//Point point1(-1.7f, -30.0f, -2.3f);
 	//Point point2(-1.7f, 30.0f, -2.3f);
 
-	Point point1(m_frontLeft, -30.0f, -SENSOR_Z);
-	Point point2(m_RearLeft, 30.0f, -SENSOR_Z);
+	// Segment (Right Side)
+	Point pointRight1(m_frontRight, -30.0f, -SENSOR_Z);
+	Point pointRight2(m_RearRight, 30.0f, -SENSOR_Z);
 
-	Segment segment(point1, point2);
-	m_segment = segment;
+	Segment segmentRight(pointRight1, pointRight2);
+	m_segmentRight = segmentRight;
+
+	// Segment (Left Side)
+	Point pointLeft1(m_frontLeft, -30.0f, -SENSOR_Z);
+	Point pointLeft2(m_RearLeft, 30.0f, -SENSOR_Z);
+
+	Segment segment(pointLeft1, pointLeft2);
+	m_segmentLeft = segment;
 
 }
 

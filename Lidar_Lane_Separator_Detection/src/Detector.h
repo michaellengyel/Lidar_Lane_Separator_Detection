@@ -30,7 +30,8 @@ public:
 
 	void algorithm();
 
-	Segment m_segment;
+	Segment m_segmentRight;
+	Segment m_segmentLeft;
 
 private:
 
@@ -41,6 +42,11 @@ private:
 
 	void slidingWindow(std::vector<double> &box, double& result);
 
+	// Results (Right side)
+	double m_frontRight = 0;
+	double m_RearRight = 0;
+
+	// Results (Left side)
 	double m_frontLeft = 0;
 	double m_RearLeft = 0;
 

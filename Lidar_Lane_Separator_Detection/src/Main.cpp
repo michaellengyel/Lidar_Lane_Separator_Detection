@@ -166,9 +166,13 @@ int main() {
 		glBegin(GL_LINES);
 		glColor3f(0.0f, 0.0f, 1.0f);
 
-		// Line 1
-		glVertex3f(detector.m_segment.m_start.m_xPos, detector.m_segment.m_start.m_yPos, detector.m_segment.m_start.m_zPos);
-		glVertex3f(detector.m_segment.m_end.m_xPos, detector.m_segment.m_end.m_yPos, detector.m_segment.m_end.m_zPos);
+		// Line (Left side)
+		glVertex3f(detector.m_segmentLeft.m_start.m_xPos, detector.m_segmentLeft.m_start.m_yPos, detector.m_segmentLeft.m_start.m_zPos);
+		glVertex3f(detector.m_segmentLeft.m_end.m_xPos, detector.m_segmentLeft.m_end.m_yPos, detector.m_segmentLeft.m_end.m_zPos);
+
+		// Line (Right side)
+		glVertex3f(detector.m_segmentRight.m_start.m_xPos, detector.m_segmentRight.m_start.m_yPos, detector.m_segmentRight.m_start.m_zPos);
+		glVertex3f(detector.m_segmentRight.m_end.m_xPos, detector.m_segmentRight.m_end.m_yPos, detector.m_segmentRight.m_end.m_zPos);
 
 		glEnd();
 		// Separator Line Rendering Test Code End
