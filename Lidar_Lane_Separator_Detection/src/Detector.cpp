@@ -15,15 +15,7 @@ void Detector::algorithm() {
 	std::sort(m_xFrontLeft.begin(), m_xFrontLeft.end(), std::greater<double>());
 	std::sort(m_xRearLeft.begin(), m_xRearLeft.end(), std::greater<double>());
 
-	// Test print
-	/*
-	std::cout.precision(17);
-	
-	for (int i = 100; i < 1100; i++) {
-		//std::cout << (m_xFrontRight.at(i) -m_xFrontRight.at(i + 1)) << std::endl;
-		std::cout << m_xFrontLeft.at(i) << std::endl;
-	}
-	*/
+	// Call sliding window funcion on space boxes
 
 	// Sliding window functions (Right side)
 	slidingWindow(m_xFrontRight, m_frontRight);
@@ -108,6 +100,33 @@ void Detector::cluster() {
 void Detector::slidingWindow(std::vector<double> &box, double& result) {
 
 	// Calculate average of points 
+	double average = boxAverage(box);
+
+	// Calculate average value of sliding window
+	for (int i = 0; i < box.size() - WINDOW_SIZE; i++) {
+
+		double windowTotal = 0;
+
+		for (int j = 0; j < WINDOW_SIZE - 1; j++) {
+			windowTotal += (box.at(i + j) - box.at(i + j + 1));
+		}
+
+		double windowAverage = windowTotal / WINDOW_SIZE;
+
+		// std::cout << "Window average: " << windowAverage << std::endl; //LOGGING COMMENT
+
+		// If window average times a treshhold value is greater then the box average
+		if ((windowAverage * SEPARATOR_TRESHHOLD) < average) {
+			result = box.at(i);
+			return;
+		}
+
+	}
+}
+
+double Detector::boxAverage(std::vector<double> &box) {
+
+	// Calculate average of points 
 	double average = 0;
 	double total = 0;
 
@@ -116,26 +135,7 @@ void Detector::slidingWindow(std::vector<double> &box, double& result) {
 	}
 
 	average = total / box.size();
-	std::cout << "Average: " << average << std::endl;
+	// std::cout << "Box average: " << average << std::endl; //LOGGING COMMENT
 
-	// Sliding window
-	const int WINDOW_SIZE = 1000;
-
-
-	// Pooling ALGO #1
-	for (int i = 0; i < box.size() - WINDOW_SIZE; i++) {
-		double windowTotal = 0;
-		for (int j = 0; j < WINDOW_SIZE - 1; j++) {
-			windowTotal += (box.at(i + j) - box.at(i + j + 1));
-		}
-		double windowAverage = windowTotal / WINDOW_SIZE;
-		//std::cout << "windowAverage: " << windowAverage << std::endl;
-		if ((windowAverage * 4) < average) {
-			std::cout << "PING" << std::endl;
-			std::cout << box.at(i) << std::endl;
-			result = box.at(i);
-			return;
-		}
-
-	}
+	return average = total / box.size();
 }

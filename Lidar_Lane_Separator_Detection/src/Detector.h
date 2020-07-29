@@ -42,6 +42,8 @@ private:
 
 	void slidingWindow(std::vector<double> &box, double& result);
 
+	double boxAverage(std::vector<double> &box);
+
 	// Results (Right side)
 	double m_frontRight = 0;
 	double m_RearRight = 0;
@@ -52,14 +54,12 @@ private:
 
 	const Scan& m_scan;
 
-	// Holds y-axis point data of frontal section
-	std::vector<double> m_xFrontRight;
-	// Holds y-axis point data of rear section
-	std::vector<double> m_xRearRight;
-	// Holds y-axis point data of frontal section
-	std::vector<double> m_xFrontLeft;
-	// Holds y-axis point data of rear section
-	std::vector<double> m_xRearLeft;
+	// Space box containers
+
+	std::vector<double> m_xFrontRight; // Holds x-axis point data of frontal section
+	std::vector<double> m_xRearRight; // Holds x-axis point data of rear section
+	std::vector<double> m_xFrontLeft; // Holds x-axis point data of frontal section
+	std::vector<double> m_xRearLeft; // Holds x-axis point data of rear section
 
 	// Config parameters
 
@@ -69,7 +69,11 @@ private:
 	const double REAR_MAX = 0;
 	const double REAR_MIN = -30;
 
-	const double SENSOR_Z = 2.3;
+	const double SENSOR_Z = 2.3; // Known sensor application parameter
+
+	const double SEPARATOR_TRESHHOLD = 4; // Experiance based algorithm hyperparameter
+
+	const int WINDOW_SIZE = 1000; // Sliding window size
 
 };
 
