@@ -22,7 +22,7 @@ enum class dataFormatA : unsigned int
 	NUMBER_OF_COLUMNS = 9
 };
 
-enum class algoParameters : unsigned int
+enum class algoParameters : int
 {
 	MIN_DISTANCE = 0,
 	MAX_DISTANCE = 255,
@@ -32,8 +32,8 @@ enum class algoParameters : unsigned int
 
 	MAX_X = 20,
 	MIN_X = -20,
-	MAX_Y = 40,
-	MIN_Y = -40,
+	MAX_Y = 30,
+	MIN_Y = -20,
 	MAX_Z = 20,
 	MIN_Z = -20,
 
