@@ -29,7 +29,9 @@ https://learnopengl.com/
 
 Apache-2.0 License   
 
-![](docs/thumbnail.png)
+## Image
+
+![](docs/thumbnail.PNG)
 
 
 
