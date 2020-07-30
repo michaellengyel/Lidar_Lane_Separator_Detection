@@ -50,6 +50,12 @@ void Preprocessor::filterData(Scan& scan, std::string blocks[]) {
 	bool distanceInRange = (std::stod(blocks[m_columnDistance]) <= maxDistance) && (std::stod(blocks[m_columnDistance]) > minDistance);
 	bool intensityInRange = (std::stod(blocks[m_columnIntensity]) <= maxIntensity) && (std::stod(blocks[m_columnIntensity]) > minIntensity);
 
+	bool xInRange = (std::stod(blocks[m_columnX]) <= m_maxX) && (std::stod(blocks[m_columnX]) > m_minX);
+	bool yInRange = (std::stod(blocks[m_columnY]) <= m_maxY) && (std::stod(blocks[m_columnY]) > m_minY);
+	bool zInRange = (std::stod(blocks[m_columnZ]) <= m_maxZ) && (std::stod(blocks[m_columnZ]) > m_minZ);
+
+	bool orthoInRange = (xInRange && yInRange && zInRange);
+
 	// Duplicate filtering logic
 	// TODO: Refactor
 	bool readingDuplicate = true;
@@ -60,7 +66,7 @@ void Preprocessor::filterData(Scan& scan, std::string blocks[]) {
 	}
 
 	// Filtering
-	if (distanceInRange && intensityInRange && readingDuplicate) {
+	if ((distanceInRange && intensityInRange) && (readingDuplicate && orthoInRange)) {
 
 		Point point(std::stod(blocks[m_columnX]), std::stod(blocks[m_columnY]), std::stod(blocks[m_columnZ]));
 		Scan::Pulse pulse(point);
