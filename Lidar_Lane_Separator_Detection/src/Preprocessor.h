@@ -38,9 +38,9 @@ private:
 	void trackDuplicate(std::string blocks[]);
 
 	// Input file config parameters
-	const unsigned int m_columnX = static_cast<unsigned int>(dataFormatA::COLUMN_X);
-	const unsigned int m_columnY = static_cast<unsigned int>(dataFormatA::COLUMN_Y);
-	const unsigned int m_columnZ = static_cast<unsigned int>(dataFormatA::COLUMN_Z);
+	const int m_columnX = static_cast<unsigned int>(dataFormatA::COLUMN_X);
+	const int m_columnY = static_cast<unsigned int>(dataFormatA::COLUMN_Y);
+	const int m_columnZ = static_cast<unsigned int>(dataFormatA::COLUMN_Z);
 	const unsigned int m_columnDistance = static_cast<unsigned int>(dataFormatA::DISTANCE);
 	const unsigned int m_columnIntensity = static_cast<unsigned int>(dataFormatA::INTENSITY);
 	const unsigned int m_columnLaserID = static_cast<unsigned int>(dataFormatA::LASER_ID);
@@ -52,6 +52,15 @@ private:
 	const unsigned int maxDistance = static_cast<unsigned int>(algoParameters::MAX_DISTANCE);
 	const unsigned int minIntensity = static_cast<unsigned int>(algoParameters::MIN_INTENSITY);
 	const unsigned int maxIntensity = static_cast<unsigned int>(algoParameters::MAX_INTENSITY);
+
+	const int m_minX = static_cast<unsigned int>(algoParameters::MIN_X);
+	const int m_maxX = static_cast<unsigned int>(algoParameters::MAX_X);
+
+	const int m_minY = static_cast<unsigned int>(algoParameters::MIN_Y);
+	const int m_maxY = static_cast<unsigned int>(algoParameters::MAX_Y);
+
+	const int m_minZ = static_cast<unsigned int>(algoParameters::MIN_Z);
+	const int m_maxZ = static_cast<unsigned int>(algoParameters::MAX_Z);
 
 	// Defines which duplicate frame to use (currently 0, 1 available)
 	const unsigned int m_usedDuplicate = static_cast<unsigned int>(algoParameters::USED_DUPLICATE);

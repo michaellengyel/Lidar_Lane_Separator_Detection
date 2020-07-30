@@ -25,9 +25,18 @@ enum class dataFormatA : unsigned int
 enum class algoParameters : unsigned int
 {
 	MIN_DISTANCE = 0,
-	MAX_DISTANCE = 30,
+	MAX_DISTANCE = 255,
+
 	MIN_INTENSITY = 0,
 	MAX_INTENSITY = 255,
+
+	MAX_X = 20,
+	MIN_X = -20,
+	MAX_Y = 40,
+	MIN_Y = -40,
+	MAX_Z = 20,
+	MIN_Z = -20,
+
 	//LASER_ID = 0
 	USED_DUPLICATE = 0, // Which duplicate to use
 	NUMBER_OF_DUPLICATES = 2 // Number of duplicates in data
