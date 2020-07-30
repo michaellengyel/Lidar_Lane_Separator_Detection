@@ -16,7 +16,9 @@ Windows 10
 5. Set configuration to "Release"   
 6. Make sure Lidar_Lane_Separator_Detection is "Set as StartUp Project"
 7. Build and run software with ctrl+F5   
-8. Use WASD keys and Mouse to change position in displayed point cloud   
+8. Use WASD keys and Mouse to change position in displayed point cloud  
+
+To change to the data file (.csv) change the file name in Main.cpp
 
 ## Used Sources
 
@@ -27,7 +29,7 @@ https://learnopengl.com/
 
 Apache-2.0 License   
 
-https://github.com/michaellengyel/Lidar_Lane_Separator_Detection/tree/master/docs/thumbnail.png
+![](docs/thumbnail.png)
 
 
 
