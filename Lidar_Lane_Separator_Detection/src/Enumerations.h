@@ -32,7 +32,7 @@ enum class algoParameters : int
 
 	MAX_X = 20,
 	MIN_X = -20,
-	MAX_Y = 30,
+	MAX_Y = 20,
 	MIN_Y = -20,
 	MAX_Z = 20,
 	MIN_Z = -20,

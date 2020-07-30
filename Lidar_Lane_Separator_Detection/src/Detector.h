@@ -7,6 +7,7 @@
 
 #include "Scan.h"
 #include "Segment.h"
+#include "Enumerations.h"
 
 #include <vector>
 #include <algorithm>
@@ -55,25 +56,37 @@ private:
 	const Scan& m_scan;
 
 	// Space box containers
-
 	std::vector<double> m_xFrontRight; // Holds x-axis point data of frontal section
 	std::vector<double> m_xRearRight; // Holds x-axis point data of rear section
 	std::vector<double> m_xFrontLeft; // Holds x-axis point data of frontal section
 	std::vector<double> m_xRearLeft; // Holds x-axis point data of rear section
 
-	// Config parameters
+	// SpaceBox resolution config
+	static const int PERPENDICULAR_NUMBER = 2;
 
+	class SpaceBox {
+	public:
+
+		std::vector<double> m_xPoints;
+		double m_boxAverage;
+	};
+
+	SpaceBox spaceBox[PERPENDICULAR_NUMBER * 2]; // SpaceBox index odd (Left), index even (Right)
+
+	// Config parameters
 	const double FRONT_MIN = 0;
-	const double FRONT_MAX = 30;
+	const double FRONT_MAX = static_cast<double>(algoParameters::MAX_Y);
 
 	const double REAR_MAX = 0;
-	const double REAR_MIN = -30;
+	const double REAR_MIN = static_cast<double>(algoParameters::MIN_Y);
 
 	const double SENSOR_Z = 2.3; // Known sensor application parameter
 
 	const double SEPARATOR_TRESHHOLD = 4; // Experiance based algorithm hyperparameter
 
 	const int WINDOW_SIZE = 1000; // Sliding window size
+
+
 
 };
 

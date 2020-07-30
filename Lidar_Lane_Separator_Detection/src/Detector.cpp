@@ -40,15 +40,15 @@ void Detector::algorithm() {
 	//Point point2(-1.7f, 30.0f, -2.3f);
 
 	// Segment (Right Side)
-	Point pointRight1(m_frontRight, -30.0f, -SENSOR_Z);
-	Point pointRight2(m_RearRight, 30.0f, -SENSOR_Z);
+	Point pointRight1(m_frontRight, REAR_MIN, -SENSOR_Z);
+	Point pointRight2(m_RearRight, FRONT_MAX, -SENSOR_Z);
 
 	Segment segmentRight(pointRight1, pointRight2);
 	m_segmentRight = segmentRight;
 
 	// Segment (Left Side)
-	Point pointLeft1(m_frontLeft, -30.0f, -SENSOR_Z);
-	Point pointLeft2(m_RearLeft, 30.0f, -SENSOR_Z);
+	Point pointLeft1(m_frontLeft, REAR_MIN, -SENSOR_Z);
+	Point pointLeft2(m_RearLeft, FRONT_MAX, -SENSOR_Z);
 
 	Segment segment(pointLeft1, pointLeft2);
 	m_segmentLeft = segment;
@@ -91,10 +91,10 @@ void Detector::cluster() {
 		}
 	}
 
-	std::cout << "m_xFrontRight" << m_xFrontRight.size() << std::endl;
-	std::cout << "m_xRearRight" << m_xRearRight.size() << std::endl;
-	std::cout << "m_xFrontLeft" << m_xFrontLeft.size() << std::endl;
-	std::cout << "m_xRearLeft" << m_xRearLeft.size() << std::endl;
+	// std::cout << "m_xFrontRight" << m_xFrontRight.size() << std::endl; //LOGGING COMMENT
+	// std::cout << "m_xRearRight" << m_xRearRight.size() << std::endl; //LOGGING COMMENT
+	// std::cout << "m_xFrontLeft" << m_xFrontLeft.size() << std::endl; //LOGGING COMMENT
+	// std::cout << "m_xRearLeft" << m_xRearLeft.size() << std::endl; //LOGGING COMMENT
 }
 
 void Detector::slidingWindow(std::vector<double> &box, double& result) {
