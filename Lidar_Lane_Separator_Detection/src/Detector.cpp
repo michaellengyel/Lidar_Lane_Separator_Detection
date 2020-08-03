@@ -7,23 +7,24 @@ void Detector::algorithm() {
 
 	// Sort all datapoints in all slices based on size of x component
 
-	// Right Side
-	std::sort(m_xFrontRight.begin(), m_xFrontRight.end(), std::greater<double>());
-	std::sort(m_xRearRight.begin(), m_xRearRight.end(), std::greater<double>());
+	// Left side
+	for (int i = 0; i < m_spaceBoxsLeft.size(); i++) {
+		std::sort(m_spaceBoxsLeft.at(i).m_xPoints.begin(), m_spaceBoxsLeft.at(i).m_xPoints.end(), std::greater<double>());
+	}
 
-	// Left Side
-	std::sort(m_xFrontLeft.begin(), m_xFrontLeft.end(), std::greater<double>());
-	std::sort(m_xRearLeft.begin(), m_xRearLeft.end(), std::greater<double>());
+	// Right side
+	for (int i = 0; i < m_spaceBoxsRight.size(); i++) {
+		std::sort(m_spaceBoxsRight.at(i).m_xPoints.begin(), m_spaceBoxsRight.at(i).m_xPoints.end(), std::greater<double>());
+	}
+
 
 	// Call sliding window funcion on space boxes
+	// left side
+	slidingWindow(m_spaceBoxsLeft);
 
-	// Sliding window functions (Right side)
-	slidingWindow(m_xFrontRight, m_frontRight);
-	slidingWindow(m_xRearRight, m_RearRight);
+	// Right side
+	slidingWindow(m_spaceBoxsRight);
 
-	// Sliding window functions (Left side)
-	slidingWindow(m_xFrontLeft, m_frontLeft);
-	slidingWindow(m_xRearLeft, m_RearLeft);
 	
 	std::cout << "Number of pulse points: " << m_scan.m_data.size() << std::endl;
 
@@ -39,19 +40,31 @@ void Detector::algorithm() {
 	//Point point1(-1.7f, -30.0f, -2.3f);
 	//Point point2(-1.7f, 30.0f, -2.3f);
 
-	// Segment (Right Side)
-	Point pointRight1(m_frontRight, REAR_MIN, -SENSOR_Z);
-	Point pointRight2(m_RearRight, FRONT_MAX, -SENSOR_Z);
+	// Call the segmentMaker to re-wrap the segments to be rendered
+	segmentMaker();
 
-	Segment segmentRight(pointRight1, pointRight2);
-	m_segmentRight = segmentRight;
+}
 
-	// Segment (Left Side)
-	Point pointLeft1(m_frontLeft, REAR_MIN, -SENSOR_Z);
-	Point pointLeft2(m_RearLeft, FRONT_MAX, -SENSOR_Z);
+void Detector::init() {
 
-	Segment segment(pointLeft1, pointLeft2);
-	m_segmentLeft = segment;
+	// Calculate size of increment
+	double range = FRONT_MAX - REAR_MIN;
+	double boxYSize = range / NUMBER_OF_BOXES;
+
+	double lowerBound = REAR_MIN; // init lowerBound with min value
+
+	// Create and init a fixed number of SpaceBoxs
+	for (int i = 0; i < NUMBER_OF_BOXES; i++) {
+		
+		SpaceBox spaceBox(lowerBound + boxYSize, lowerBound);
+
+		spaceBox.m_yCoord = lowerBound + (boxYSize / 2);
+
+		m_spaceBoxsLeft.push_back(spaceBox); // Mirror left and right containers
+		m_spaceBoxsRight.push_back(spaceBox); // Mirror left and right containers
+
+		lowerBound += boxYSize;
+	}
 
 }
 
@@ -60,68 +73,77 @@ void Detector::cluster() {
 	double xCurrent = 0;
 	double yCurrent = 0;
 
-	bool isFrontRight = false;
-	bool isRearRight = false;
-
-	bool isFrontLeft = false;
-	bool isRearLeft = false;
-
 	for (int i = 0; i < m_scan.m_data.size(); i++) {
 
 		xCurrent = m_scan.m_data.at(i).m_point.m_xPos;
 		yCurrent = m_scan.m_data.at(i).m_point.m_yPos;
 
-		isFrontRight = (((yCurrent >= FRONT_MIN) && (yCurrent <= FRONT_MAX)) && (xCurrent >= 0));
-		isRearRight = (((yCurrent < REAR_MAX) && (yCurrent >= REAR_MIN)) && (xCurrent >= 0));
-
-		isFrontLeft = (((yCurrent >= FRONT_MIN) && (yCurrent <= FRONT_MAX)) && (xCurrent < 0));
-		isRearLeft = (((yCurrent < REAR_MAX) && (yCurrent >= REAR_MIN)) && (xCurrent < 0));
-
-		if (isFrontRight) {
-			m_xFrontRight.push_back(xCurrent);
+		// Sorting of the points into their respective containers
+		// if: left side
+		if (xCurrent < 0) {
+			for (int i = 0; i < m_spaceBoxsLeft.size(); i++) {
+				// If the point is in the range of the box at pos i
+				if ((yCurrent >= m_spaceBoxsLeft.at(i).m_lowerLimit) && (yCurrent < m_spaceBoxsLeft.at(i).m_upperLimit) ) {
+					// Add the points y coord to the relevant container
+					m_spaceBoxsLeft.at(i).m_xPoints.push_back(xCurrent);
+					break;
+				}
+			}
 		}
-		else if (isRearRight) {
-			m_xRearRight.push_back(xCurrent);
+		// if: right side
+		else if (xCurrent >= 0) {
+			for (int i = 0; i < m_spaceBoxsRight.size(); i++) {
+				// If the point is in the range of the box at pos i
+				if ((yCurrent >= m_spaceBoxsRight.at(i).m_lowerLimit) && (yCurrent < m_spaceBoxsRight.at(i).m_upperLimit)) {
+					// Add the points y coord to the relevant container
+					m_spaceBoxsRight.at(i).m_xPoints.push_back(xCurrent);
+					break;
+				}
+			}
 		}
-		else if (isFrontLeft) {
-			m_xFrontLeft.push_back(xCurrent);
-		}
-		else if (isRearLeft) {
-			m_xRearLeft.push_back(xCurrent);
-		}
+	
 	}
 
-	// std::cout << "m_xFrontRight" << m_xFrontRight.size() << std::endl; //LOGGING COMMENT
-	// std::cout << "m_xRearRight" << m_xRearRight.size() << std::endl; //LOGGING COMMENT
-	// std::cout << "m_xFrontLeft" << m_xFrontLeft.size() << std::endl; //LOGGING COMMENT
-	// std::cout << "m_xRearLeft" << m_xRearLeft.size() << std::endl; //LOGGING COMMENT
+
+	for (int i = 0; i < m_spaceBoxsLeft.size(); i++) {
+		std::cout << "Left side, container: " << i << " is " << m_spaceBoxsLeft.at(i).m_xPoints.size() << std::endl; //LOGGING COMMENT
+	}
+
+	for (int i = 0; i < m_spaceBoxsRight.size(); i++) {
+		std::cout << "Right side, container: " << i << " is " << m_spaceBoxsRight.at(i).m_xPoints.size() << std::endl; //LOGGING COMMENT
+	}
+
+
 }
 
-void Detector::slidingWindow(std::vector<double> &box, double& result) {
+void Detector::slidingWindow(std::vector<SpaceBox> &box) {
 
-	// Calculate average of points 
-	double average = boxAverage(box);
+	for (int k = 0; k < box.size(); k++) {
+		// Calculate average of points 
+		double average = boxAverage(box.at(k).m_xPoints);
 
-	// Calculate average value of sliding window
-	for (int i = 0; i < box.size() - WINDOW_SIZE; i++) {
+		// Calculate average value of sliding window
+		for (int i = 0; i < box.at(k).m_xPoints.size() - WINDOW_SIZE; i+=WINDOW_STEP_SIZE) {
 
-		double windowTotal = 0;
+			double windowTotal = 0;
 
-		for (int j = 0; j < WINDOW_SIZE - 1; j++) {
-			windowTotal += (box.at(i + j) - box.at(i + j + 1));
+			for (int j = 0; j < WINDOW_SIZE - 1; j++) {
+				windowTotal += (box.at(k).m_xPoints.at(i + j) - box.at(k).m_xPoints.at(i + j + 1));
+			}
+
+			double windowAverage = windowTotal / WINDOW_SIZE;
+
+			// std::cout << "Window average: " << windowAverage << std::endl; //LOGGING COMMENT
+
+			// If window average times a treshhold value is greater then the box average
+			if ((windowAverage * SEPARATOR_TRESHHOLD) < average) {
+				box.at(k).m_xCoord = box.at(k).m_xPoints.at(i);
+				break;
+			}
+
 		}
-
-		double windowAverage = windowTotal / WINDOW_SIZE;
-
-		// std::cout << "Window average: " << windowAverage << std::endl; //LOGGING COMMENT
-
-		// If window average times a treshhold value is greater then the box average
-		if ((windowAverage * SEPARATOR_TRESHHOLD) < average) {
-			result = box.at(i);
-			return;
-		}
-
 	}
+
 }
 
 double Detector::boxAverage(std::vector<double> &box) {
@@ -138,4 +160,30 @@ double Detector::boxAverage(std::vector<double> &box) {
 	// std::cout << "Box average: " << average << std::endl; //LOGGING COMMENT
 
 	return average = total / box.size();
+}
+
+void Detector::segmentMaker() {
+
+	// Left side
+	for (int i = 0; i < m_spaceBoxsLeft.size() - 1; i++) {
+
+		Point pointRight1(m_spaceBoxsLeft.at(i).m_xCoord, m_spaceBoxsLeft.at(i).m_yCoord, -SENSOR_Z);
+		Point pointRight2(m_spaceBoxsLeft.at(i + 1).m_xCoord, m_spaceBoxsLeft.at(i + 1).m_yCoord, -SENSOR_Z);
+
+		Segment segment(pointRight1, pointRight2);
+
+		m_segments.push_back(segment);
+	}
+
+	// Right side
+	for (int i = 0; i < m_spaceBoxsRight.size() - 1; i++) {
+
+		Point pointRight1(m_spaceBoxsRight.at(i).m_xCoord, m_spaceBoxsRight.at(i).m_yCoord, -SENSOR_Z);
+		Point pointRight2(m_spaceBoxsRight.at(i + 1).m_xCoord, m_spaceBoxsRight.at(i + 1).m_yCoord, -SENSOR_Z);
+
+		Segment segment(pointRight1, pointRight2);
+
+		m_segments.push_back(segment);
+	}
+
 }

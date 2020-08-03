@@ -167,12 +167,19 @@ int main() {
 		glColor3f(0.0f, 0.0f, 1.0f);
 
 		// Line (Left side)
-		glVertex3f(detector.m_segmentLeft.m_start.m_xPos, detector.m_segmentLeft.m_start.m_yPos, detector.m_segmentLeft.m_start.m_zPos);
-		glVertex3f(detector.m_segmentLeft.m_end.m_xPos, detector.m_segmentLeft.m_end.m_yPos, detector.m_segmentLeft.m_end.m_zPos);
+		//glVertex3f(detector.m_segmentLeft.m_start.m_xPos, detector.m_segmentLeft.m_start.m_yPos, detector.m_segmentLeft.m_start.m_zPos);
+		//glVertex3f(detector.m_segmentLeft.m_end.m_xPos, detector.m_segmentLeft.m_end.m_yPos, detector.m_segmentLeft.m_end.m_zPos);
 
 		// Line (Right side)
-		glVertex3f(detector.m_segmentRight.m_start.m_xPos, detector.m_segmentRight.m_start.m_yPos, detector.m_segmentRight.m_start.m_zPos);
-		glVertex3f(detector.m_segmentRight.m_end.m_xPos, detector.m_segmentRight.m_end.m_yPos, detector.m_segmentRight.m_end.m_zPos);
+		//glVertex3f(detector.m_segmentRight.m_start.m_xPos, detector.m_segmentRight.m_start.m_yPos, detector.m_segmentRight.m_start.m_zPos);
+		//glVertex3f(detector.m_segmentRight.m_end.m_xPos, detector.m_segmentRight.m_end.m_yPos, detector.m_segmentRight.m_end.m_zPos);
+
+		// Render all segments created by the segmentMaker
+		for (int i = 0; i < detector.m_segments.size(); i++) {
+			glVertex3f(detector.m_segments.at(i).m_start.m_xPos, detector.m_segments.at(i).m_start.m_yPos, detector.m_segments.at(i).m_start.m_zPos);
+			glVertex3f(detector.m_segments.at(i).m_end.m_xPos, detector.m_segments.at(i).m_end.m_yPos, detector.m_segments.at(i).m_end.m_zPos);
+		
+		}
 
 		glEnd();
 		// Separator Line Rendering Test Code End
