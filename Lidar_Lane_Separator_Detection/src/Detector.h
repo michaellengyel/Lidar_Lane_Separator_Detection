@@ -26,7 +26,8 @@ public:
 
 	void algorithm();
 
-	Segment m_segment;
+	std::vector<Segment> m_segments;
+
 
 private:
 
