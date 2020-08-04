@@ -1,7 +1,8 @@
 #include "Detector.h"
 
 void Detector::algorithm() {
-	std::cout << m_scan.m_data.size() << std::endl;
+
+	std::cout << "Total number of pulses: " << m_scan.m_data.size() << std::endl;
 
 	double all = 0;
 
@@ -9,7 +10,7 @@ void Detector::algorithm() {
 		all += m_scan.m_data[i].m_point.m_zPos;
 	}
 
-	std::cout << all/ m_scan.m_data.size() << std::endl;
+	std::cout << "Average of all pulse's z component: " << (all / m_scan.m_data.size()) << std::endl;
 
 	// Setting up mock data
 	Point point1(-1.7f, -30.0f, -2.3f);
@@ -21,7 +22,7 @@ void Detector::algorithm() {
 	Segment segment2(point3, point4);
 
 	Point point5(4.7f, -24.0f, 3.3f);
-	Point point6(9.7f, 30.0f, -8.3f);
+	Point point6(9.7f, 10.0f, -8.3f);
 	Segment segment3(point5, point6);
 
 	Point point7(23.7f, -6.0f, 21.3f);

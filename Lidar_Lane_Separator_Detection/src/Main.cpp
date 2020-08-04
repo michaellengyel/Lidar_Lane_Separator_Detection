@@ -45,6 +45,10 @@ float lastFrame = 0.0f;
 
 int main() {
 
+	std::cout << "Welcome to Lane Separator Detection!" << std::endl;
+	std::cout << "Version: Framework" << std::endl;
+	std::cout << std::endl;
+
 	// Declaring data container and handling classes
 	IOHandler ioHandler("res/4.csv");
 	Scan scan;
