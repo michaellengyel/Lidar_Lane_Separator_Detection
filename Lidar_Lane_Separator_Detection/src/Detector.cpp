@@ -68,9 +68,37 @@ void Detector::gridMaker() {
 	}
 
 	for (int i = 0; i < m_boxes.size(); i++) {
-		//std::cout << m_boxes.at(i).m_upperYLimit << "\t" << m_boxes.at(i).m_lowerYLimit << "\t" << m_boxes.at(i).m_upperXLimit << "\t" << m_boxes.at(i).m_lowerXLimit << std::endl;
+		//std::cout << m_boxes.at(i).m_upperYLimit << "\t" << m_boxes.at(i).m_lowerYLimit << "\t" << m_boxes.at(i).m_upperXLimit << "\t" << m_boxes.at(i).m_lowerXLimit << std::endl; // DEBUGGING COOMMENT
 	}
 
 	std::cout << "Number of boxes (pixels): " << m_boxes.size() << std::endl;
 
+}
+
+void Detector::gridWeightSetter() {
+
+	double xCurrent = 0;
+	double yCurrent = 0;
+
+	for (int i = 0; i < m_scan.m_data.size(); i++) {
+
+		xCurrent = m_scan.m_data.at(i).m_point.m_xPos;
+		yCurrent = m_scan.m_data.at(i).m_point.m_yPos;
+
+		for (int j = 0; j < m_boxes.size(); j++) {
+
+			bool inRangeY = ((m_boxes.at(j).m_lowerYLimit <= yCurrent) && (m_boxes.at(j).m_upperYLimit > yCurrent));
+			bool inRangeX = ((m_boxes.at(j).m_lowerXLimit <= xCurrent) && (m_boxes.at(j).m_upperXLimit > xCurrent));
+
+			if (inRangeY && inRangeX) {
+				m_boxes.at(j).m_weight++;
+			}
+		}
+
+	}
+
+	for (int j = 0; j < m_boxes.size(); j++) {
+		// std::cout << m_boxes.at(j).m_weight << std::endl; // DEBUGGING COMMENT
+	}
+ 
 }
