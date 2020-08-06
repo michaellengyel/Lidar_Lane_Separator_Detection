@@ -23,7 +23,6 @@ public:
 	Detector(const Scan& scan) : m_scan(scan) {
 
 		gridMaker();
-		gridWeightSetter();
 
 	}
 
@@ -61,7 +60,7 @@ private:
 
 		}
 
-		unsigned int m_weight = 0;
+		unsigned const int m_weight = 0;
 
 		const double m_upperYLimit;
 		const double m_lowerYLimit;
@@ -75,15 +74,10 @@ private:
 	// Member container for grid boxes
 	std::vector<GridBox> m_boxes;
 
-	// The gridMaker divides the x-y plane into a grid of a parameterizable resolution
+	// The grid maker divides the x-y plane into a grid of a parameterizable resolution
 	// where the value of a given box is determined by the number of reflections contained
 	// within it's borders.
 	void gridMaker();
-
-	// The gridWeightSetter iterates across all the boxes in the grid for all Pulses in
-	// the Scan container and sets the weight of the box based on the number of points
-	// inside the border of the box.
-	void gridWeightSetter();
 
 	// Config parameters
 
