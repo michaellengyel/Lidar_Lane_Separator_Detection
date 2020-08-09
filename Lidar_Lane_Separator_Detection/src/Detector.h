@@ -24,7 +24,7 @@ public:
 
 		gridMaker();
 		gridWeightSetter();
-
+		gridFilter();
 	}
 
 	~Detector() {
@@ -58,15 +58,21 @@ private:
 			m_upperXLimit(upperXLimit),
 			m_lowerXLimit(lowerXLimit)
 		{
-
+			m_xVector = ((upperXLimit + lowerXLimit) / 2);
+			m_yVector = ((upperYLimit + lowerYLimit) / 2);
 		}
 
 		unsigned int m_weight = 0;
+
+		double m_xVector;
+		double m_yVector;
 
 		const double m_upperYLimit;
 		const double m_lowerYLimit;
 		const double m_upperXLimit;
 		const double m_lowerXLimit;
+
+		bool filtered = false;
 	};
 
 	// Member container reference for Pulse data
@@ -85,6 +91,14 @@ private:
 	// inside the border of the box.
 	void gridWeightSetter();
 
+	// The gridFilter iterates across all the boxes in the grid and filters the ones whose
+	// weight falls below some arbitrary treshold.
+	void gridFilter();
+
+	// The hough function implments the hough transform, which acts on the elements of the
+	// grid similar to the way it would act on the pixels of an image.
+	void hough();
+
 	// Config parameters
 
 	const double MAX_Y = static_cast<double>(algoParameters::MAX_Y);
@@ -97,6 +111,8 @@ private:
 	const double DELTA_X = MAX_X - MIN_X;
 
 	const int NUMBER_OF_BOXES = 100; // Number of containers along the x and y axis
+
+	const int FILTER_TRESHOLD = 30; // Weight of a box blow which it is filtered
 
 };
 #endif

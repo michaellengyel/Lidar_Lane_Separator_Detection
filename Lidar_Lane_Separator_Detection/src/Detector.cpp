@@ -102,3 +102,39 @@ void Detector::gridWeightSetter() {
 	}
  
 }
+
+void Detector::gridFilter() {
+
+	bool filter = false;
+	
+	for (int i = 0; i < m_boxes.size(); i++) {
+
+		filter = (m_boxes.at(i).m_weight < FILTER_TRESHOLD);
+
+		if (filter) {
+			m_boxes.at(i).filtered = true;
+		}
+		else {
+			// Do nothing
+		}
+
+	}
+
+}
+ 
+void Detector::hough() {
+
+	bool filtered = false;
+
+	for (int i = 0; i < m_boxes.size(); i++) {
+
+		filtered = m_boxes.at(i).filtered;
+
+		if (!filtered) {
+
+			// TODO: Implement hough for unfiltered points
+		}
+	
+	}
+
+}
