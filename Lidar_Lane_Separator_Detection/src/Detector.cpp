@@ -2,6 +2,11 @@
 
 void Detector::algorithm() {
 
+	gridMaker();
+	gridWeightSetter();
+	gridFilter();
+	hough();
+
 	// Iterate through all points in the point cloud
 	for (int i = 0; i < m_scan.m_data.size(); i++) {
 
@@ -107,12 +112,13 @@ void Detector::gridFilter() {
 
 	bool filter = false;
 	
-	for (int i = 0; i < m_boxes.size(); i++) {
+	for (int i = 0; i < m_boxes.size() - 1; i++) {
 
 		filter = (m_boxes.at(i).m_weight < FILTER_TRESHOLD);
 
 		if (filter) {
-			m_boxes.at(i).filtered = true;
+			m_boxes.erase(m_boxes.begin() + i);
+			i--;
 		}
 		else {
 			// Do nothing
@@ -120,21 +126,76 @@ void Detector::gridFilter() {
 
 	}
 
+	m_boxes.shrink_to_fit();
+
+	std::cout << "Number of boxes (pixels) filtered: " << m_boxes.capacity() << std::endl;
+
 }
  
 void Detector::hough() {
 
-	bool filtered = false;
+	// Start Dirty Hack TODO: Refactor
 
-	for (int i = 0; i < m_boxes.size(); i++) {
+	std::vector<int> accumulatorTable(THETA_RESOLUTION * RHO_RESOLUTION);
 
-		filtered = m_boxes.at(i).filtered;
+	// End Start Dirty Hack TODO: Refactor
 
-		if (!filtered) {
+	double xCoord = 0;
+	double yCoord = 0;
 
-			// TODO: Implement hough for unfiltered points
+	for (int i = 0; i < m_boxes.size() - 1; i++) {
+
+		// TODO: Implement hough for unfiltered points
+
+		for (int theta = 0; theta < THETA_RESOLUTION - 1; theta++) {
+
+			xCoord = m_boxes.at(i).m_xCoord;
+			yCoord = m_boxes.at(i).m_yCoord;
+
+			// using form RHO = Xi*cos(THETA) + Yi*sin(THETA)
+			double rho = xCoord * cos(theta * PI / 180) + yCoord * sin(theta * PI / 180);
+
+			int normalizedRho = accumulatorNormalizer(rho);
+
+			accumulatorTable.at(dimensionConverter(normalizedRho, theta, RHO_RESOLUTION, THETA_RESOLUTION)) += 1;
+
+			//std::cout.precision(17); // DEBUGGING COMMENT
+			//std::cout << theta << "," << normalizedRho << std::endl; // DEBUGGING COMMENT
+
 		}
 	
+	}
+
+	//filterTopIntersects(accumulatorTable);
+
+}
+
+int Detector::accumulatorNormalizer(double rho) {
+
+	// Offset rho to make sure it's positive
+	double offset = SQRTWO * MAX_Y;
+	rho = rho + offset;
+
+	double norm = 1 / rho;
+	double scaledNorm = norm * RHO_RESOLUTION;
+
+	return static_cast<int>(scaledNorm);
+}
+
+int Detector::dimensionConverter(int i, int j, int iSize, int jSize) {
+
+	return ((i * jSize) + j);
+
+}
+
+void Detector::filterTopIntersects(std::vector<int> &accumulatorTable) {
+
+	for (int i = 0; i < accumulatorTable.size(); i++) {
+
+		if (accumulatorTable.at(i) > HOUGH_TRESHOLD) {
+			std::cout << "ping" << std::endl;
+		}
+
 	}
 
 }
