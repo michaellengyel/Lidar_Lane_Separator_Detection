@@ -5,13 +5,13 @@
 #ifndef DETECTOR
 #define DETECTOR
 
+#include "Enumerations.h"
 #include "Scan.h"
 #include "Segment.h"
-#include "Enumerations.h"
 
-#include <vector>
 #include <algorithm>
 #include <functional>
+#include <vector>
 
 //============================================================================================================
 // Class Documentation Placeholder
@@ -20,93 +20,83 @@
 
 class Detector {
 public:
+  Detector(const Scan &scan) : m_scan(scan) { init(); }
 
-	Detector(const Scan& scan) : m_scan(scan) {
+  ~Detector() {}
 
-		init();
-	}
+  void algorithm();
 
-	~Detector() {
-
-	}
-
-	void algorithm();
-
-	std::vector<Segment> m_segments;
+  std::vector<Segment> m_segments;
 
 private:
+  // Space box container
+  class SpaceBox {
+  public:
+    SpaceBox(int upperLimit, int lowerLimit)
+        : m_upperLimit(upperLimit), m_lowerLimit(lowerLimit) {}
 
-	// Space box container
-	class SpaceBox {
-	public:
+    std::vector<double> m_xPoints;
 
-		SpaceBox(int upperLimit, int lowerLimit) : m_upperLimit(upperLimit), m_lowerLimit(lowerLimit) {
+    double m_yCoord = 0; // Stores the first found point of density (y)
+    double m_xCoord = 0; // Stores the boxes middle as a coord (x)
 
-		}
+    double m_boxAverage;
 
-		std::vector<double> m_xPoints;
+    int m_upperLimit;
+    int m_lowerLimit;
+  };
 
-		double m_yCoord = 0; // Stores the first found point of density (y)
-		double m_xCoord = 0; // Stores the boxes middle as a coord (x)
+  // Space box containers
+  std::vector<SpaceBox> m_spaceBoxsLeft;
+  std::vector<SpaceBox> m_spaceBoxsRight;
 
-		double m_boxAverage;
+  // This function creates and inititalzes a fixed number of SpaceBox objects
+  // which it then adds to the spaceBoxs vector
+  void init();
 
-		int m_upperLimit;
-		int m_lowerLimit;
-	};
+  // The cluster function sorts all the x (perpendicular) values of all Pulses
+  // stored in a Scan, into individual vector containers representing a box in
+  // space. The number of boxes should be a configurable value.
+  void cluster();
 
-	// Space box containers
-	std::vector<SpaceBox> m_spaceBoxsLeft;
-	std::vector<SpaceBox> m_spaceBoxsRight;
+  // Slides across the x-axis of all 3D points and looks for regions of higher
+  // then average density
+  void slidingWindow(std::vector<SpaceBox> &box);
 
-	// This function creates and inititalzes a fixed number of SpaceBox objects which it then
-	// adds to the spaceBoxs vector
-	void init();
+  // calculates the average density of a given box
+  double boxAverage(std::vector<double> &box);
 
-	// The cluster function sorts all the x (perpendicular) values of all Pulses stored in
-	// a Scan, into individual vector containers representing a box in space. The number of
-	// boxes should be a configurable value.
-	void cluster();
+  // Creates renderable segments from the left and right spaceBox containers by
+  // restructuring them
+  void segmentMaker();
 
-	// Slides across the x-axis of all 3D points and looks for regions of higher then average
-	// density
-	void slidingWindow(std::vector<SpaceBox> &box);
+  // Results (Right side)
+  double m_frontRight = 0;
+  double m_RearRight = 0;
 
-	// calculates the average density of a given box
-	double boxAverage(std::vector<double> &box);
+  // Results (Left side)
+  double m_frontLeft = 0;
+  double m_RearLeft = 0;
 
-	// Creates renderable segments from the left and right spaceBox containers by restructuring them
-	void segmentMaker();
+  const Scan &m_scan;
 
-	// Results (Right side)
-	double m_frontRight = 0;
-	double m_RearRight = 0;
+  // Config parameters
+  const double FRONT_MIN = 0;
+  const double FRONT_MAX = static_cast<double>(algoParameters::MAX_Y);
 
-	// Results (Left side)
-	double m_frontLeft = 0;
-	double m_RearLeft = 0;
+  const double REAR_MAX = 0;
+  const double REAR_MIN = static_cast<double>(algoParameters::MIN_Y);
 
-	const Scan& m_scan;
+  const int NUMBER_OF_BOXES = 8; // Number of containers along the y axis
 
-	// Config parameters
-	const double FRONT_MIN = 0;
-	const double FRONT_MAX = static_cast<double>(algoParameters::MAX_Y);
+  const double SENSOR_Z = 2.3; // Known sensor application parameter
 
-	const double REAR_MAX = 0;
-	const double REAR_MIN = static_cast<double>(algoParameters::MIN_Y);
+  const double SEPARATOR_TRESHHOLD =
+      3; // Experiance based algorithm tuning parameter
 
-	const int NUMBER_OF_BOXES = 8; // Number of containers along the y axis
+  const int WINDOW_SIZE = 200; // Sliding window size
 
-	const double SENSOR_Z = 2.3; // Known sensor application parameter
-
-	const double SEPARATOR_TRESHHOLD = 3; // Experiance based algorithm tuning parameter
-
-	const int WINDOW_SIZE = 200; // Sliding window size
-
-	const int WINDOW_STEP_SIZE = 10; // Sliding window step size
-
-
-
+  const int WINDOW_STEP_SIZE = 10; // Sliding window step size
 };
 
 #endif
