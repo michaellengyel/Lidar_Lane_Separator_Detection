@@ -5,9 +5,8 @@
 #ifndef IO_HANDLER
 #define IO_HANDLER
 
-#include <iostream>
-#include <string>
 #include <fstream>
+#include <iostream>
 #include <string>
 #include <vector>
 
@@ -18,32 +17,29 @@
 
 class IOHandler {
 public:
+  IOHandler(std::string inputFile) : m_inputFile(inputFile) {
 
-	IOHandler(std::string inputFile) : m_inputFile(inputFile) {
+    // TODO: Put open file in in constructor
+    m_inFile.open(m_inputFile);
 
-		// TODO: Put open file in in constructor
-		m_inFile.open(m_inputFile);
+    // Handle read issues
+    if (!m_inFile) {
+      std::cerr << "Unable to open file " << m_inputFile << std::endl;
+      exit(1);
+    }
+  }
 
-		// Handle read issues
-		if (!m_inFile) {
-			std::cerr << "Unable to open file " << m_inputFile << std::endl;
-			exit(1);
-		}
-	}
+  ~IOHandler() {
 
-	~IOHandler() {
+    // TODO: Put close file in destructor
+    m_inFile.close();
+  }
 
-		// TODO: Put close file in destructor
-		m_inFile.close();
-	}
-
-	std::string readData(char delimeter);
+  std::string readData(char delimeter);
 
 private:
-
-	std::string m_inputFile;
-	std::ifstream m_inFile;
-
+  std::string m_inputFile;
+  std::ifstream m_inFile;
 };
 
 #endif
